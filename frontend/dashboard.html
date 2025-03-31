@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Career Counseling</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+    
+<body>
+    <header>
+        <h1>Welcome, <span id="user-name">User</span>!</h1>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Home</a></li>
+                <li><a id="mentorshipLink" href="#">Mentorship</a></li>
+                <li><a href="service.html">Services</a></li>
+                <li><a href="jobs.html">Jobs</a></li>
+                <li><a href="quiz.html">Quizzes</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    
+        <!-- Profile Card -->
+<div class="profile-card">
+    <img src="profile.png" alt="Profile Picture" class="profile-pic" id="profile-pic">
+    <h2 id="user-name-display">Loading...</h2>
+    <p><strong>Role:</strong> <span id="user-role">Loading...</span></p>
+    <p><strong>Education:</strong> <span id="user-education">Loading...</span></p>
+    <p><strong>Skills:</strong> <span id="user-skills">Loading...</span></p>
+    <p><strong>Resume:</strong> <a href="/backend/uploads/resume/resume_9.pdf" target="_blank">View Resume</a>
+    </p>
+
+
+    <button class="button" id="edit-profile-btn"><span>Edit Profile</span></button>
+    <section class="dashboard">
+        <!-- Profile Card -->
+        <form id="profilePicForm" enctype="multipart/form-data">
+            <label for="profile-pic-upload">Upload Profile Picture:</label>
+            <input type="file" id="profile-pic-upload" name="profile_pic" title="Choose a profile picture to upload">
+            <button type="submit" class="button">Upload Picture</button>
+        </form>
+    </section>
+    
+</div>
+
+
+        <!-- Update Profile Section -->
+       
+    </section>
+
+    <!-- User Progress Analytics -->
+    <div class="analytics-section">
+        <h3>Analytics & Progress Overview</h3>
+        <canvas id="progressChart"></canvas>
+    </div>
+
+   
+
+    <!-- Recent Activity Section -->
+    <div class="recent-activity">
+        <h3>Recent Activity</h3>
+        <p><strong>Last Quiz Taken:</strong> <span id="last-quiz">Loading...</span></p>
+        <p><strong>Last Mentorship Update:</strong> <span id="last-mentorship">Loading...</span></p>
+        <p><strong>Recent Job Application:</strong> <span id="last-job">Loading...</span></p>
+    </div>
+
+    <!-- Progress Section -->
+    <div class="progress-section">
+        <h3>Progress Tracking</h3>
+        <div class="progress-bar">
+            <p><strong>Mentorship:</strong> <span id="mentorship-status">Not Enrolled</span></p>
+            <div class="progress">
+                <div id="mentorship-progress" class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <p><strong>Quiz Completion:</strong> <span id="quiz-progress">No Quiz Taken</span></p>
+            <div class="progress">
+                <div id="quiz-progress-fill" class="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="actions">
+        <button class="button" id="mentorshipButton"><span>View Mentorship</span></button>
+        <button class="button" onclick="window.location.href='quiz.html'"><span>Take a Quiz</span></button>
+        <button class="button" onclick="window.location.href='chat.html'"><span>Open Chat</span></button>
+    </div>
+
+    <script src="js/chat.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("token");
+            const response = await fetch("http://localhost:5000/api/user/profile", {
+                headers: { "Authorization": `Bearer ${token}` },
+            });
+            const user = await response.json();
+
+            document.getElementById("user-name-display").textContent = user.name;
+            document.getElementById("user-role").textContent = user.role;
+            document.getElementById("user-education").textContent = user.education || "Not Provided";
+            document.getElementById("user-skills").textContent = user.skills || "Not Provided";
+            document.getElementById("user-resume").href = user.resume || "#";
+            
+            // Redirect Mentorship link and button based on user role
+            const mentorshipLink = document.getElementById("mentorshipLink");
+            const mentorshipButton = document.getElementById("mentorshipButton");
+            const mentorshipPage = user.role === "mentor" ? "mentorship-mentor.html" : "mentorship-student.html";
+            mentorshipLink.href = mentorshipPage;
+            mentorshipButton.onclick = () => window.location.href = mentorshipPage;
+        });
+    </script>
+    <script>
+        function logout() {
+        alert("Logging out...");
+        window.location.href = "login.html";
+    }</script>
+   
+</body>
+</html>

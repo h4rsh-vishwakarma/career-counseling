@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor-Student Chat</title>
+    <link rel="stylesheet" href="css/chat.css">
+
+</head>
+
+<body>
+
+    <header>
+        <h1>Welcome, <span id="user-name">User</span>!</h1>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Home</a></li>
+                <li><a id="mentorshipLink" href="#">Mentorship</a></li>
+                <li><a href="service.html">Services</a></li>
+                <li><a href="jobs.html">Jobs</a></li>
+                <li><a href="quiz.html">Quizzes</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>Mentor-Student Chat</h2>
+            <span id="onlineStatus" class="status offline">Offline</span>
+        </div>
+        <div id="chatContainer" class="chat-box"></div>
+        <div id="typingIndicator" class="typing-indicator">User is typing...</div>
+        <div class="chat-input">
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <button id="sendButton">Send</button>
+        </div>
+    </div>  
+    <script src="chatClient.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("token");
+            const response = await fetch("http://localhost:5000/api/user/profile", {
+                headers: { "Authorization": `Bearer ${token}` },
+            });
+            const user = await response.json();
+
+            document.getElementById("user-name-display").textContent = user.name;
+            document.getElementById("user-role").textContent = user.role;
+            document.getElementById("user-education").textContent = user.education || "Not Provided";
+            document.getElementById("user-skills").textContent = user.skills || "Not Provided";
+            document.getElementById("user-resume").href = user.resume || "#";
+            
+            // Redirect Mentorship link and button based on user role
+            const mentorshipLink = document.getElementById("mentorshipLink");
+            const mentorshipButton = document.getElementById("mentorshipButton");
+            const mentorshipPage = user.role === "mentor" ? "mentorship-mentor.html" : "mentorship-student.html";
+            mentorshipLink.href = mentorshipPage;
+            mentorshipButton.onclick = () => window.location.href = mentorshipPage;
+        });
+    </script>
+    <script>
+        const socket = io("http://localhost:5000");
+        const userId = localStorage.getItem("userId"); // Get user ID from localStorage
+        const chatBox = document.getElementById("chat-box");
+        const chatInput = document.getElementById("chat-input");
+        const sendButton = document.getElementById("send-button");
+        const receiverId = "USER_ID_HERE"; // Replace with the actual receiver's ID
+        
+        // Join chat
+        socket.emit("join", userId);
+        
+        // Handle online users
+        socket.on("onlineUsers", (users) => {
+            console.log("Online users:", users);
+        });
+        
+        // Typing indicator
+        chatInput.addEventListener("input", () => {
+            socket.emit("typing", { senderId: userId, receiverId });
+        });
+        
+        // Show typing message
+        socket.on("typing", (typingUserId) => {
+            if (typingUserId !== userId) {
+                document.getElementById("typing-indicator").innerText = "User is typing...";
+                setTimeout(() => {
+                    document.getElementById("typing-indicator").innerText = "";
+                }, 2000);
+            }
+        });
+        
+        // Send message
+        sendButton.addEventListener("click", () => {
+            const message = chatInput.value.trim();
+            if (message) {
+                socket.emit("sendMessage", { senderId: userId, receiverId, message });
+                appendMessage("You", message);
+                chatInput.value = "";
+            }
+        });
+        
+        // Receive message
+        socket.on("receiveMessage", ({ senderId, message }) => {
+            appendMessage("User " + senderId, message);
+        });
+        
+        // Append message to chat box
+        function appendMessage(sender, message) {
+            const msgDiv = document.createElement("div");
+            msgDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            chatBox.appendChild(msgDiv);
+        }
+        
+        // Load chat history
+        async function loadChatHistory() {
+            const response = await fetch(`http://localhost:5000/api/chat/${userId}/${receiverId}`);
+            const messages = await response.json();
+            messages.forEach(msg => {
+                appendMessage(msg.senderId === userId ? "You" : "User " + msg.senderId, msg.message);
+            });
+        }
+        loadChatHistory();
+        </script>
+        
+    <script src="js/chat.js"></script>
+    <script src="js/logout.js"></script>
+
+</body>
+
+</html>

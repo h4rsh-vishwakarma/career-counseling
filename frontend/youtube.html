@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Recommendations</title>
+    <link rel="stylesheet" href="css/youtube.css">
+</head>
+<body>
+    <header>
+        <h1>Best YouTube Videos for Your Career & Skills</h1>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a id="mentorshipLink" href="#">Mentorship</a></li>
+                <li><a href="jobs.html">Jobs</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+
+            </ul>
+        </nav>
+    </header>
+
+    <section class="search-section">
+        <h2>Find the Best Videos</h2>
+        <label for="career-field">Select Career Field:</label>
+        <select id="career-field">
+            <option value="software development">Software Development</option>
+            <option value="data science">Data Science</option>
+            <option value="marketing">Marketing</option>
+            <option value="design">Design</option>
+        </select>
+
+        <label for="skill">Select Skill:</label>
+        <input type="text" id="skill" placeholder="Enter a skill (e.g., Python, SEO)">
+        <button onclick="fetchVideos()">Search Videos</button>
+    </section>
+
+    <section id="video-list" class="video-list">
+        <h2>Recommended Videos</h2>
+        <p id="loading" class="loading">🔄 Loading videos, please wait...</p>
+
+        <div id="videos"></div>
+    </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("token");
+            const response = await fetch("http://localhost:5000/api/user/profile", {
+                headers: { "Authorization": `Bearer ${token}` },
+            });
+            const user = await response.json();
+
+            document.getElementById("user-name-display").textContent = user.name;
+            document.getElementById("user-role").textContent = user.role;
+            document.getElementById("user-education").textContent = user.education || "Not Provided";
+            document.getElementById("user-skills").textContent = user.skills || "Not Provided";
+            document.getElementById("user-resume").href = user.resume || "#";
+            
+            // Redirect Mentorship link and button based on user role
+            const mentorshipLink = document.getElementById("mentorshipLink");
+            const mentorshipButton = document.getElementById("mentorshipButton");
+            const mentorshipPage = user.role === "mentor" ? "mentorship-mentor.html" : "mentorship-student.html";
+            mentorshipLink.href = mentorshipPage;
+            mentorshipButton.onclick = () => window.location.href = mentorshipPage;
+        });
+    </script>
+    <script src="js/youtube.js"></script>
+    <script src="js/logout.js"></script>
+
+</body>
+</html>
