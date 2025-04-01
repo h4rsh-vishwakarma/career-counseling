@@ -5,7 +5,7 @@ dotenv.config();
 
 // ✅ Use a connection pool for better performance
 const pool = mysql.createPool({
-    host: process.env.DB_HOST || "career_counseling.db.railway.app",
+    host: process.env.DB_HOST || "mysql.railway.internal",
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASS || "maQzEepvIOeQQBVLekPaBDJwpAwBvMck",  // ✅ Ensure this is correct
     database: process.env.DB_NAME || "railway",
