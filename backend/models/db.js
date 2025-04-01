@@ -7,7 +7,7 @@ dotenv.config();
 const pool = mysql.createPool({
     host: process.env.DB_HOST || "career_counseling.db.railway.app",
     user: process.env.DB_USER || "root",
-    password: process.env.DB_PASS || "Hacker@2003",  // ✅ Ensure this is correct
+    password: process.env.DB_PASS || "maQzEepvIOeQQBVLekPaBDJwpAwBvMck",  // ✅ Ensure this is correct
     database: process.env.DB_NAME || "railway",
     port: process.env.DB_PORT || 3306,  // ✅ Use correct MySQL port
     waitForConnections: true,
