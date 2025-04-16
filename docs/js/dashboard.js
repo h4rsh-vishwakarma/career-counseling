@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function loadUserProfile() {
     try {
         console.log("🔹 Fetching user profile...");
-        const response = await fetch("http://localhost:5000/api/user/profile", {
+        const response = await fetch("https://career-counseling.onrender.com/api/user/profile", {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
 
@@ -42,7 +42,7 @@ async function loadUserProfile() {
         document.getElementById("user-skills").textContent = user.skills || "Not Provided";
 
         try {
-            const response = await fetch("http://localhost:5000/api/user/profile", {
+            const response = await fetch("https://career-counseling.onrender.com/api/user/profile", {
                 headers: { "Authorization": `Bearer ${token}` },
             });
         
@@ -70,7 +70,7 @@ async function loadUserProfile() {
             const resumeLink = document.getElementById("user-resume");
         
             if (user.resume) {
-                resumeLink.href = `http://localhost:5000/uploads/resume/${user.resume}`;
+                resumeLink.href = `https://career-counseling.onrender.com/uploads/resume/${user.resume}`;
                 resumeLink.target = "_blank";
                 resumeLink.textContent = "View Resume";
             } else {
@@ -90,7 +90,7 @@ async function loadUserProfile() {
         
         const profilePic = document.querySelector(".profile-pic");
         if (user.profile_pic) {
-            profilePic.src = `http://localhost:5000${user.profile_pic}?t=${Date.now()}`;
+            profilePic.src = `https://career-counseling.onrender.com${user.profile_pic}?t=${Date.now()}`;
         } else {
             profilePic.src = "default-profile.png";
         }
@@ -124,7 +124,7 @@ async function uploadProfilePicture(event) {
 
     try {
         console.log("🔹 Uploading profile picture...");
-        const response = await fetch("http://localhost:5000/api/user/uploadProfilePic", {
+        const response = await fetch("https://career-counseling.onrender.com/api/user/uploadProfilePic", {
             method: "POST",
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             body: formData
@@ -140,7 +140,7 @@ async function uploadProfilePicture(event) {
         alert("✅ Profile picture uploaded successfully!");
 
         // ✅ Dynamically update profile picture (without reloading)
-        document.querySelector(".profile-pic").src = `http://localhost:5000${data.profilePicPath}?t=${Date.now()}`;
+        document.querySelector(".profile-pic").src = `https://career-counseling.onrender.com${data.profilePicPath}?t=${Date.now()}`;
     } catch (error) {
         console.error("❌ Error uploading profile picture:", error);
         alert("❌ Failed to upload profile picture.");
@@ -159,7 +159,7 @@ async function uploadResume(event) {
 
     try {
         console.log("🔹 Uploading resume...");
-        const response = await fetch("http://localhost:5000/api/user/uploadResume", {
+        const response = await fetch("https://career-counseling.onrender.com/api/user/uploadResume", {
             method: "POST",
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             body: formData
@@ -175,7 +175,7 @@ async function uploadResume(event) {
 
         // ✅ Update Resume Link Without Reloading
         const resumeLink = document.getElementById("user-resume");
-        resumeLink.href = `http://localhost:5000/uploads/resume/${data.resumePath}`;
+        resumeLink.href = `https://career-counseling.onrender.com/uploads/resume/${data.resumePath}`;
         resumeLink.textContent = "View Resume";
         resumeLink.target = "_blank";
     } catch (error) {
@@ -187,7 +187,7 @@ async function uploadResume(event) {
 // ✅ Load Progress & Display Chart
 async function loadProgressChart() {
     try {
-        const response = await fetch("http://localhost:5000/api/user/progress", {
+        const response = await fetch("https://career-counseling.onrender.com/api/user/progress", {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
 
@@ -218,7 +218,7 @@ async function loadProgressChart() {
 // ✅ Load Recent Activity
 async function loadRecentActivity() {
     try {
-        const response = await fetch("http://localhost:5000/api/user/recent-activities", {
+        const response = await fetch("https://career-counseling.onrender.com/api/user/recent-activities", {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
 
