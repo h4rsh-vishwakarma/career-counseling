@@ -5,11 +5,11 @@ dotenv.config();
 
 // ✅ Use a connection pool for better performance
 const pool = mysql.createPool({
-    host: process.env.DB_HOST || "localhost",
+    host: process.env.DB_HOST || "ballast.proxy.rlwy.net",
     user: process.env.DB_USER || "root",
-    password: process.env.DB_PASS || "Hacker@2003",  // ✅ Ensure this is correct
-    database: process.env.DB_NAME || "career_counseling",
-    port: process.env.DB_PORT || 4444,  // ✅ Use correct MySQL port
+    password: process.env.DB_PASS || "maQzEepvIOeQQBVLekPaBDJwpAwBvMck",  // ✅ Ensure this is correct
+    database: process.env.DB_NAME || "railway",
+    port: process.env.DB_PORT || 26333,  // ✅ Use correct MySQL port
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
