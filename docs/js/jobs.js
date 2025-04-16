@@ -5,7 +5,7 @@ async function fetchJobs() {
     const location = "India"; // Default location
 
     try {
-        const response = await fetch(`http://localhost:5000/api/jobs?skills=${skills}&qualification=${qualification}&stream=${stream}&location=${location}`);
+        const response = await fetch(`https://career-counseling.onrender.com/api/jobs?skills=${skills}&qualification=${qualification}&stream=${stream}&location=${location}`);
         const jobs = await response.json();
 
         const jobList = document.getElementById("job-listings");
@@ -44,7 +44,7 @@ async function fetchJobs() {
     jobsContainer.innerHTML = "";  // Clear previous results
 
     try {
-        const response = await fetch(`http://localhost:5000/api/jobs?skills=Software&qualification=${qualification}&stream=${stream}&location=India`);
+        const response = await fetch(`https://career-counseling.onrender.com/api/jobs?skills=Software&qualification=${qualification}&stream=${stream}&location=India`);
         const jobs = await response.json();
 
         // Hide loading message after fetching
