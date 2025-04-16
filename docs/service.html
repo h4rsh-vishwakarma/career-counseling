@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services - Career Counseling</title>
+    <link rel="stylesheet" href="css/service.css">
+</head>
+
+<body>
+    <header>
+        <h1>Our Services</h1>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a id="mentorshipLink" href="#">Mentorship</a></li>
+                <li><a href="jobs.html">Jobs</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+
+            </ul>
+        </nav>
+    </header>
+
+    <section class="services">
+        <div class="service">
+            <h3>Career Assessments</h3>
+            <p>Personalized tests to help you identify your strengths and career paths.</p>
+        </div>
+        <div class="service">
+            <h3>Resume Building</h3>
+            <p>Get expert guidance to create a professional resume.</p>
+        </div>
+        <div class="service">
+            <h3>Interview Preparation</h3>
+            <p>Mock interviews and coaching to help you ace your next job interview.</p>
+        </div>
+    </section>
+    <script src="js/logout.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("token");
+            const response = await fetch("http://localhost:5000/api/user/profile", {
+                headers: { "Authorization": `Bearer ${token}` },
+            });
+            const user = await response.json();
+
+            document.getElementById("user-name-display").textContent = user.name;
+            document.getElementById("user-role").textContent = user.role;
+            document.getElementById("user-education").textContent = user.education || "Not Provided";
+            document.getElementById("user-skills").textContent = user.skills || "Not Provided";
+            document.getElementById("user-resume").href = user.resume || "#";
+            
+            // Redirect Mentorship link and button based on user role
+            const mentorshipLink = document.getElementById("mentorshipLink");
+            const mentorshipButton = document.getElementById("mentorshipButton");
+            const mentorshipPage = user.role === "mentor" ? "mentorship-mentor.html" : "mentorship-student.html";
+            mentorshipLink.href = mentorshipPage;
+            mentorshipButton.onclick = () => window.location.href = mentorshipPage;
+        });
+    </script>
+    <footer>
+        <p>&copy; 2025 Career Counseling. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

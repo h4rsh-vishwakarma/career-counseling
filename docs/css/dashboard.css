@@ -1,0 +1,254 @@
+/* Profile Card */
+
+.profile-card {
+    
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: rgb(217, 227, 233);
+    
+}
+.profile-card button{
+    margin: 10px;
+    background: #037cac;
+    color: white;
+    padding: 15px 40px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 15px;
+}
+.dashboard{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+
+
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('Welcome\ !\ Our\ career\ counseling.png') ;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    position: relative;
+}
+
+header {
+    width: 100%;
+  
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: #ffd700;
+}
+
+.profile-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+
+/* Progress Bar */
+
+.progress-section {
+    width: 80%;
+    margin: auto;
+    text-align: center;
+    color: aliceblue;
+}
+
+.progress-bar {
+    margin: 10px 0;
+    color: aliceblue;
+}
+
+.progress {
+    background: #ddd;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, #ff416c, #ff4b2b);
+    width: 0%;
+    transition: width 0.5s ease-in-out;
+}
+
+
+/* Actions */
+
+.actions {
+    text-align: center;
+    margin-top: 20px;
+    color: aliceblue;
+    animation:alternate-reverse 2s linear infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    
+}
+
+.actions button {
+    margin: 10px;
+    background: #037cac;
+    color: white;
+    padding: 10px 35px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 20px;
+}
+/* Analytics Section */
+.analytics-section {
+    width: 80%;
+    margin: 20px auto;
+    text-align: center;
+    color: #e4dbdb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+    color: aliceblue;
+}
+/* Recent Activity */
+.recent-activity {
+    width: 80%;
+    color: aliceblue;
+    padding: 15px;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: left;
+}
+/* Update Profile Section */
+.update-profile {
+    width: 80%;
+    color: aliceblue;
+    padding: 15px;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+.update-profile input {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.update-profile button {
+    background: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.update-profile button:hover {
+    background: #0056b3;
+}
+/* Recommendations Section */
+.recommendations {
+    width: 80%;
+    color: aliceblue;
+    padding: 15px;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: left;
+}
+.recommendations ul {
+    list-style: none;
+    padding: 0;
+}
+.recommendations li {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+.button {
+    border-radius: 3px;
+    background-color: #1ec2f4;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 20px;
+    padding: 20px;
+    width: 200px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  .button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+  .button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+  
+  .button:hover span {
+    padding-right: 25px;
+  }
+  
+  .button:hover span:after {
+    opacity: 1;
+    right: 0;
+  }

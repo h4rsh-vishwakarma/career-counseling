@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobs - Career Counseling</title>
+    <link rel="stylesheet" href="css/jobs.css">
+    <script src="js/jobs.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <h1>Job Opportunities</h1>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a id="mentorshipLink" href="#">Mentorship</a></li>
+                <li><a href="service.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+
+            </ul>
+        </nav>
+    </header>
+
+    <section class="job-search">
+        <h2>Find Your Dream Job</h2>
+        <label for="qualification">Select Your Qualification:</label>
+        <select id="qualification">
+            <option value="10th">10th Pass</option>
+            <option value="12th">12th Pass</option>
+            <option value="undergraduate">Undergraduate</option>
+            <option value="postgraduate">Postgraduate</option>
+        </select>
+
+        <label for="stream">Select Your Stream:</label>
+        <select id="stream">
+            <option value="science">Science</option>
+            <option value="commerce">Commerce</option>
+            <option value="arts">Arts</option>
+            <option value="engineering">Engineering</option>
+            <option value="medical">Medical</option>
+        </select>
+<br><br>
+
+        <button class="button" onclick="fetchJobs()"><span>Search Jobs</span></button>
+    </section>
+
+    <section id="job-listings">
+        <h2>Job Results</h2>
+        <p>Select your qualification and stream, then click 'Search Jobs' to see relevant listings.</p>
+        <p id="loadingMessage" style="display: none; color: blue;">🔄 Loading jobs...</p>
+        <div id="jobsContainer"></div>
+    </section>
+
+    <script src="js/logout.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("token");
+            const response = await fetch("http://localhost:5000/api/user/profile", {
+                headers: { "Authorization": `Bearer ${token}` },
+            });
+            const user = await response.json();
+
+            document.getElementById("user-name-display").textContent = user.name;
+            document.getElementById("user-role").textContent = user.role;
+            document.getElementById("user-education").textContent = user.education || "Not Provided";
+            document.getElementById("user-skills").textContent = user.skills || "Not Provided";
+            document.getElementById("user-resume").href = user.resume || "#";
+            
+            // Redirect Mentorship link and button based on user role
+            const mentorshipLink = document.getElementById("mentorshipLink");
+            const mentorshipButton = document.getElementById("mentorshipButton");
+            const mentorshipPage = user.role === "mentor" ? "mentorship-mentor.html" : "mentorship-student.html";
+            mentorshipLink.href = mentorshipPage;
+            mentorshipButton.onclick = () => window.location.href = mentorshipPage;
+        });
+    </script>
+    <footer>
+        <p>&copy; 2025 Career Counseling. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

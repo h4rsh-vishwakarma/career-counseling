@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizzes - Career Counseling</title>
+    <link rel="stylesheet" href="css/quiz.css">
+</head>
+
+<body>
+    <header>
+        <h1>Quiz Section</h1>
+        <nav>
+            <ul>
+              
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a id="mentorshipLink" href="#">Mentorship</a></li>
+                <li><a href="jobs.html">Jobs</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="quiz-section">
+        <h2>Available Quizzes</h2>
+        <label for="quiz-category">Select Quiz Type:</label>
+        <select id="quiz-category">
+            <option value="mentorship">Mentorship Quizzes</option>
+            <option value="career">Career-Based Quizzes</option>
+        </select>
+        <button onclick="loadQuiz()">Start Quiz</button>
+    </section>
+
+    <section id="quiz-container" style="display:none;">
+        <h3 id="quiz-title"></h3>
+        <div id="quiz-questions"></div>
+        <button onclick="submitQuiz()">Submit Quiz</button>
+        <p id="score-message" style="display:none; color: green; font-weight: bold;"></p>
+    </section>
+
+    <script>
+        async function loadQuiz() {
+            const category = document.getElementById("quiz-category").value;
+            document.getElementById("quiz-container").style.display = "block";
+            document.getElementById("quiz-questions").innerHTML = "Loading questions...";
+        
+            let apiUrl = "";
+            if (category === "mentorship") {
+                apiUrl = "https://opentdb.com/api.php?amount=5&category=9&type=multiple"; // General Knowledge
+            } else {
+                apiUrl = "https://opentdb.com/api.php?amount=5&category=17&type=multiple"; // Science & Nature
+            }
+        
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                displayQuestions(data.results);
+            } catch (error) {
+                document.getElementById("quiz-questions").innerHTML = "Failed to load questions. Try again later.";
+            }
+        }
+        
+        function displayQuestions(questions) {
+            const quizContainer = document.getElementById("quiz-questions");
+            quizContainer.innerHTML = ""; // Clear previous questions
+        
+            questions.forEach((q, index) => {
+                const div = document.createElement("div");
+                div.classList.add("question-box"); // Apply styling
+        
+                div.innerHTML = `<p class="question-text">${index + 1}. ${q.question}</p>`;
+        
+                const options = [...q.incorrect_answers, q.correct_answer].sort(() => Math.random() - 0.5);
+                options.forEach(option => {
+                    div.innerHTML += `
+                        <label class="option-label">
+                            <input type="radio" name="q${index}" value="${option}"> 
+                            <span class="option-text">${option}</span>
+                        </label><br>
+                    `;
+                });
+        
+                quizContainer.appendChild(div);
+            });
+        }
+        
+        function submitQuiz() {
+            alert("Quiz submitted successfully! Your score will be displayed in 2 minutes.");
+            setTimeout(() => {
+                let score = 0;
+                const questions = document.querySelectorAll("#quiz-questions .question-box");
+                questions.forEach((div, index) => {
+                    const selected = div.querySelector(`input[name='q${index}']:checked`);
+                    if (selected && selected.value === "correct") {
+                        score++;
+                    }
+                });
+                document.getElementById("score-message").textContent = `Your Score: ${score}/${questions.length}`;
+                document.getElementById("score-message").style.display = "block";
+            }, 120000); // 2 minutes delay
+        }
+        
+
+        function logout() {
+            alert("Logging out...");
+            window.location.href = "login.html";
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("token");
+            const response = await fetch("http://localhost:5000/api/user/profile", {
+                headers: { "Authorization": `Bearer ${token}` },
+            });
+            const user = await response.json();
+
+            document.getElementById("user-name-display").textContent = user.name;
+            document.getElementById("user-role").textContent = user.role;
+            document.getElementById("user-education").textContent = user.education || "Not Provided";
+            document.getElementById("user-skills").textContent = user.skills || "Not Provided";
+            document.getElementById("user-resume").href = user.resume || "#";
+            
+            // Redirect Mentorship link and button based on user role
+            const mentorshipLink = document.getElementById("mentorshipLink");
+            const mentorshipButton = document.getElementById("mentorshipButton");
+            const mentorshipPage = user.role === "mentor" ? "mentorship-mentor.html" : "mentorship-student.html";
+            mentorshipLink.href = mentorshipPage;
+            mentorshipButton.onclick = () => window.location.href = mentorshipPage;
+        });
+    </script>
+    <footer>
+        <p>&copy; 2025 Career Counseling. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

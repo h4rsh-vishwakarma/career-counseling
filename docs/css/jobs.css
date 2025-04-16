@@ -1,0 +1,211 @@
+/* Header Section */
+header {
+    width: 100%;
+  
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: #ffd700;
+}
+
+/*body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('Welcome\ !\ Our\ career\ counseling.png') ;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    position: relative;
+}
+.contact-form{
+    color: thistle;
+}
+footer{
+ 
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+.job-search{
+    color: aquamarine;
+}
+#job-listings{
+    color: aquamarine;
+}
+.button {
+    border-radius: 3px;
+    background-color: #1ec2f4;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 20px;
+    padding: 20px;
+    width: 200px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
+  
+  .button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+  .button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+  
+  .button:hover span {
+    padding-right: 25px;
+  }
+  
+  .button:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
+
+  /* Job Listings */
+.job-item {
+    background: rgb(22, 21, 21);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.job-item h3 {
+    color: #007bff;
+}
+
+.job-item a {
+    text-decoration: none;
+    color: white;
+    background: #28a745;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.job-item a:hover {
+    background: #218838;
+}
+.job-card {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+}
+
+.job-card h3 {
+    color: #0073e6;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.job-card p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: rgb(39, 3, 3);
+}
+
+.job-card a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #ff4500;
+    text-decoration: none;
+    font-weight: bold;
+}
+/* Dropdown Styling */
+.job-search select {
+    width: 100%;
+    max-width: 300px;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #007BFF;
+    border-radius: 5px;
+    background: #fff;
+    transition: all 0.3s ease;
+    appearance: none; /* Remove default styles */
+    cursor: pointer;
+}
+
+/* Hover & Focus Effects */
+.job-search select:hover {
+    border-color: #0056b3;
+}
+.job-search select:focus {
+    outline: none;
+    border-color: #ff5722;
+    box-shadow: 0 0 5px rgba(255, 87, 34, 0.5);
+}
+
+/* Button Styling */
+.job-search .button {
+    border-radius: 5px;
+    background-color: #0295a0;
+    border: none;
+    color: #FFFFFF;
+    font-size: 18px;
+    padding: 10px 10px;
+    width: 250px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.job-search .button:hover {
+    background-color: #e4520f;
+}
+
+.job-search .button span {
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.job-search .button:hover span {
+    transform: scale(1.05);
+}

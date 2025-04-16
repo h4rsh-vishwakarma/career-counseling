@@ -1,0 +1,89 @@
+<!-- edit-profile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <header>
+        <h1>Edit Profile</h1>
+        <a href="dashboard.html">Back to Dashboard</a>
+    </header>
+
+    <section class="update-profile">
+        <h3>Update Your Profile</h3>
+        <input type="text" id="name" placeholder="Enter your name">
+        <input type="email" id="email" placeholder="Enter your email">
+        <input type="text" id="skills" placeholder="Enter your skills">
+        <input type="text" id="education" placeholder="Enter your education">
+        
+        <button onclick="saveProfile()">Save</button>
+        
+      
+
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const response = await fetch("http://localhost:5000/api/profile", {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+        
+                if (!response.ok) throw new Error("Failed to fetch user profile");
+        
+                const user = await response.json();
+                document.getElementById("edit-name").value = user.name || "";
+                document.getElementById("edit-email").value = user.email || "";
+                document.getElementById("edit-skills").value = user.skills || "";
+                document.getElementById("edit-education").value = user.education || "";
+            } catch (error) {
+                console.error("Error loading profile:", error);
+            }
+        });
+        
+
+        async function saveProfile() {
+            const profileData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                skills: document.getElementById("skills").value,
+                education: document.getElementById("education").value,
+            };
+        
+            console.log("📩 Sending Data:", profileData); // Debugging
+        
+            try {
+                const response = await fetch("http://localhost:5000/api/user/profile", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + localStorage.getItem("token")  // Include token
+                    },
+                    body: JSON.stringify(profileData)
+                });
+        
+                console.log("📩 Server Response Status:", response.status);
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || "Error updating profile.");
+                }
+        
+                const data = await response.json();
+                console.log("✅ Profile Update Success:", data);
+                alert("Profile updated successfully!");
+        
+            } catch (error) {
+                console.error("❌ Error updating profile:", error);
+                alert("Error updating profile: " + error.message);
+            }
+        }
+        
+    </script>
+</body>
+</html>

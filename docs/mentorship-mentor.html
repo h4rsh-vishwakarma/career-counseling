@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor Dashboard</title>
+    <link rel="stylesheet" href="css/mentorship.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome, Mentor</h1>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="mentorship-mentor.html">Mentorship</a></li>
+                <li><a href="logout.html" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="create-session">
+        <h3>Create a New Mentorship Session</h3>
+        <form id="create-session-form">
+            <label for="title">Title:</label>
+            <input type="text" id="title" required>
+    
+            <label for="description">Description:</label>
+            <textarea id="description" required></textarea>
+    
+            <label for="session_date">Date:</label>
+            <input type="date" id="session_date" required>
+    
+            <label for="session_time">Time:</label>
+            <input type="time" id="session_time" required>
+    
+            <label for="mode">Mode:</label>
+            <select id="mode" required>
+                <option value="Online">Online</option>
+                <option value="Offline">Offline</option>
+            </select>
+    
+            <button type="submit">Create Session</button>
+        </form>
+    </section>
+    
+    <section class="mentor-requests">
+        <h3>Mentorship Requests</h3>
+        <div id="mentor-requests-container">
+            <p>Loading mentorship requests...</p>
+        </div>
+    </section>
+    
+    <section class="mentor-sessions">
+        <h2>Your Mentorship Sessions</h2>
+        <div id="sessions-container">
+            <p>Loading your sessions...</p>
+        </div>
+      
+    </section>
+    
+    <script src="mentorship-mentor.js"></script>
+    
+
+    <script src="js/mentorship-mentor.js"></script>
+    <script src="js/logout.js"></script>
+</body>
+</html>
