@@ -22,7 +22,7 @@ async function loadSessions() {
     sessionsContainer.innerHTML = "<p>Loading your sessions...</p>";
 
     try {
-        const response = await fetch("http://localhost:5000/api/mentorship/sessions", {
+        const response = await fetch("https://career-counseling.onrender.com/api/mentorship/sessions", {
             headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
         });
 
@@ -63,7 +63,7 @@ async function createSession() {
     const mode = document.getElementById("mode").value;
 
     try {
-        const response = await fetch("http://localhost:5000/api/mentorship/create-session", {
+        const response = await fetch("https://career-counseling.onrender.com/api/mentorship/create-session", {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -88,7 +88,7 @@ async function deleteSession(sessionId) {
     if (!confirm("Are you sure you want to delete this session?")) return;
 
     try {
-        const response = await fetch(`http://localhost:5000/api/mentorship/delete/${sessionId}`, {
+        const response = await fetch(`https://career-counseling.onrender.com/api/mentorship/delete/${sessionId}`, {
             method: "DELETE",
             headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
         });
@@ -107,7 +107,7 @@ async function deleteSession(sessionId) {
 // ✅ Function to Load Mentorship Requests
 async function loadMentorshipRequests() {
     try {
-        const response = await fetch("http://localhost:5000/api/mentorship/requests", {
+        const response = await fetch("https://career-counseling.onrender.com/api/mentorship/requests", {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("token")}`
             }
@@ -141,7 +141,7 @@ async function loadMentorshipRequests() {
 // ✅ Function to Accept a Mentorship Request
 async function acceptRequest(requestId) {
     try {
-        const response = await fetch(`http://localhost:5000/api/mentorship/requests/${requestId}`, {
+        const response = await fetch(`https://career-counseling.onrender.com/api/mentorship/requests/${requestId}`, {
             method: "PUT",
             headers: { 
                 "Content-Type": "application/json",
@@ -164,7 +164,7 @@ async function acceptRequest(requestId) {
 // ✅ Function to Reject a Mentorship Request
 async function rejectRequest(requestId) {
     try {
-        const response = await fetch(`http://localhost:5000/api/mentorship/requests/${requestId}`, {
+        const response = await fetch(`https://career-counseling.onrender.com/api/mentorship/requests/${requestId}`, {
             method: "PUT",
             headers: { 
                 "Content-Type": "application/json",
