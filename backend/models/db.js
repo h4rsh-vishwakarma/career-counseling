@@ -5,7 +5,7 @@ dotenv.config();
 
 // ✅ Use a connection pool for better performance
 const pool = mysql.createPool({
-    host: process.env.DB_HOST || "mysql://root:maQzEepvIOeQQBVLekPaBDJwpAwBvMck@ballast.proxy.rlwy.net:26333/railway",
+    host: process.env.DB_HOST || "ballast.proxy.rlwy.net:26333/railway",
     user: process.env.DB_USER || "root",
     password: process.env.DB_PASS || "Hacker@2003",  // ✅ Ensure this is correct
     database: process.env.DB_NAME || "railway",
