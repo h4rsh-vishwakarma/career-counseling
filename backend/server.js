@@ -76,6 +76,9 @@ io.on("connection", (socket) => {
         io.emit("onlineUsers", Object.keys(onlineUsers));
     });
 });
+app.get('/', (req, res) => {
+  res.send('Career Counseling Backend is Live!');
+});
 
 
 const PORT = process.env.PORT || 5000;
