@@ -37,7 +37,7 @@ Clone the repository
 bash
 Copy
 Edit
-git clone https://github.com/your-username/your-repository-name.git
+git clone https://github.com/Harsh2292003/career-counseling.git
 Navigate to the project directory
 
 bash
