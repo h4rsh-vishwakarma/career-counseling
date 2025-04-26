@@ -31,6 +31,8 @@ Frontend: GitHub Pages
 Backend: Render
 Database: Railway (MySQL)
 
+![Project Screenshot](front_career.png)
+
 📚 How To Use
 Clone the repository
 
