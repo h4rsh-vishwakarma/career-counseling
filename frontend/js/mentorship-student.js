@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // ✅ Fetch available mentorship sessions
     async function fetchSessions() {
         try {
-            const response = await fetch("http://localhost:5000/api/mentorship/sessions");
+            const response = await fetch("https://career-counseling-backend.onrender.com/api/mentorship/sessions");
             const sessions = await response.json();
 
             sessionList.innerHTML = ""; // Clear previous list
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 button.addEventListener("click", async (event) => {
                     const sessionId = event.target.getAttribute("data-session-id");
                     
-                    const response = await fetch("http://localhost:5000/api/mentorship/join-session", {
+                    const response = await fetch("https://career-counseling-backend.onrender.com/api/mentorship/join-session", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ studentId, sessionId })
@@ -104,7 +104,7 @@ async function loadAvailableSessions() {
     sessionsContainer.innerHTML = "<p>Loading available sessions...</p>";
 
     try {
-        const response = await fetch("http://localhost:5000/api/mentorship/available-sessions", {
+        const response = await fetch("https://career-counseling-backend.onrender.com/api/mentorship/available-sessions", {
             method: "GET",
             headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
         });
@@ -140,7 +140,7 @@ async function loadAvailableSessions() {
 // 📌 Request to Join a Mentorship Session
 async function requestMentorship(sessionId) {
     try {
-        const response = await fetch(`http://localhost:5000/api/mentorship/request`, {
+        const response = await fetch(`https://career-counseling-backend.onrender.com/api/mentorship/request`, {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json",
