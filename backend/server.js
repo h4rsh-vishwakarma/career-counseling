@@ -21,9 +21,9 @@ const corsOptions = {
 };
 
 // Middleware
-app.use(cors(corsOptions)); // Apply CORS options
-app.use(express.json());  // ✅ Needed for JSON request parsing
-app.use(express.urlencoded({ extended: true }));  // ✅ Needed for form data
+app.use(cors(corsOptions)); // Apply CORS middleware
+app.use(express.json()); // Enable JSON parsing
+app.use(express.urlencoded({ extended: true })); // Enable form data parsing
 
 // Serve static files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
