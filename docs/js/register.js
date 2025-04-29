@@ -1,50 +1,40 @@
-document.getElementById("registerForm").addEventListener("submit", async function(event) {
-    event.preventDefault();
+document.getElementById("registerForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-    // Show loading message
-    document.getElementById("loading").style.display = "block";
+    const loading = document.getElementById("loading");
+    loading.style.display = "block"; // Show loading message
 
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("regEmail").value;
-    const password = document.getElementById("regPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-    const role = document.getElementById("role").value;
-    const skills = document.getElementById("skills").value;
-    const education = document.getElementById("education").value;
-    const resume = document.getElementById("resume").files[0];
-
-    if (password !== confirmPassword) {
-        alert("❌ Passwords do not match!");
-        document.getElementById("loading").style.display = "none";
-        return;
-    }
-
+    const form = e.target;
     const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("role", role);
-    formData.append("skills", skills);
-    formData.append("education", education);
-    formData.append("resume", resume);
+
+    formData.append("name", form.name.value);
+    formData.append("email", form.email.value);
+    formData.append("password", form.password.value);
+    formData.append("confirmPassword", form.confirmPassword.value);
+    formData.append("role", form.role.value);
+    formData.append("skills", form.skills.value);
+    formData.append("education", form.education.value);
+    formData.append("resume", form.resume.files[0]);
 
     try {
         const response = await fetch("https://career-counseling.onrender.com/api/auth/register", {
             method: "POST",
-            body: formData
+            body: formData,
         });
 
-        const data = await response.json();
+        const result = await response.json();
+        loading.style.display = "none"; // Hide loader after response
 
-        alert(data.message);
-
-        if (data.message === "User registered successfully!") {
-            window.location.href = "dashboard.html";
+        if (!response.ok) {
+            alert(result.message || "❌ Registration failed.");
+            return;
         }
-    } catch (error) {
-        console.error("❌ Error:", error);
-        alert("❌ Registration failed. Please try again.");
-    } finally {
-        document.getElementById("loading").style.display = "none";
+
+        alert(result.message);
+        window.location.href = "login.html"; // Redirect to login on success
+    } catch (err) {
+        loading.style.display = "none";
+        console.error("❌ Error:", err);
+        alert("❌ Something went wrong. Please try again later.");
     }
 });
