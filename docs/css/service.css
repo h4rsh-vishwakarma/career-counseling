@@ -60,3 +60,16 @@ footer{
     color: white;
     text-align: center;
 }
+.button {
+    border-radius: 3px;
+    background-color: #e9e505;
+    border: none;
+    color: #131212;
+    text-align: center;
+    font-size: 20px;
+    padding: 20px;
+    width: 200px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+  }
