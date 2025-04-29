@@ -8,6 +8,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     const role = document.getElementById("role").value;
     const skills = document.getElementById("skills").value;
     const education = document.getElementById("education").value;
+    const resume = document.getElementById("resume").files[0]; // Get the resume file
 
     if (password !== confirmPassword) {
         alert("❌ Passwords do not match!");
@@ -28,10 +29,21 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     loadingElement.style.display = "block";
 
     try {
+        // Use FormData to handle JSON data and file upload
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("password", password);
+        formData.append("role", role);
+        formData.append("skills", skills);
+        formData.append("education", education);
+        if (resume) {
+            formData.append("resume", resume); // Append the resume file
+        }
+
         const response = await fetch("http://localhost:5000/api/auth/register", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, password, role, skills, education })
+            body: formData // Send FormData for multipart/form-data
         });
 
         const data = await response.json();
