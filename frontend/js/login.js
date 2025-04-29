@@ -1,9 +1,15 @@
-document.getElementById("loginForm").addEventListener("submit", async function(event) {
+document.getElementById("loginForm").addEventListener("submit", async function (event) {
     event.preventDefault();
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const loadingElement = document.getElementById("loading");
+
+    // Basic validation
+    if (!email || !password) {
+        alert("Email and password cannot be empty!");
+        return;
+    }
 
     // Show loading
     loadingElement.style.display = "block";
@@ -12,7 +18,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
         const response = await fetch("https://career-counseling-backend.onrender.com/api/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email, password }),
         });
 
         const data = await response.json();
@@ -26,7 +32,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
             alert("Login failed: " + data.message);
         }
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Fetch error:", error); // Debugging information
         alert("An error occurred. Please try again.");
     } finally {
         // Hide loading
