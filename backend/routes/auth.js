@@ -2,6 +2,20 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { pool } = require("../models/db");
+const multer = require("multer");
+const path = require("path");
+
+// Resume storage configuration
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, "uploads/resume"),
+    filename: (req, file, cb) => {
+        const uniqueName = `resume_${Date.now()}${path.extname(file.originalname)}`;
+        cb(null, uniqueName);
+    }
+});
+
+const upload = multer({ storage });
+
 
 const router = express.Router();
 
