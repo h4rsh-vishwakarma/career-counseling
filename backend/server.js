@@ -11,6 +11,14 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
+const corsOptions = {
+    origin: "https://harsh2292003.github.io", // Allow your frontend's origin
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+};
+
+
+
 
 // Import Routes
 const authRoutes = require("./routes/auth");
@@ -25,7 +33,7 @@ app.use(express.urlencoded({ extended: true }));  // ✅ Needed for form data
 
 // Middleware
 app.use(cors());
-
+app.use(cors(corsOptions));
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.get("/uploads/resume/:filename", (req, res) => {
