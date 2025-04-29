@@ -1,7 +1,7 @@
 document.getElementById("registerForm").addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    // Show loading indicator
+    // Show loading message
     document.getElementById("loading").style.display = "block";
 
     const name = document.getElementById("name").value;
@@ -35,16 +35,16 @@ document.getElementById("registerForm").addEventListener("submit", async functio
         });
 
         const data = await response.json();
+
         alert(data.message);
+
+        if (data.message === "User registered successfully!") {
+            window.location.href = "dashboard.html";
+        }
     } catch (error) {
         console.error("❌ Error:", error);
         alert("❌ Registration failed. Please try again.");
     } finally {
-        // Hide loading after all actions
         document.getElementById("loading").style.display = "none";
-    }
-
-    if (data?.message === "User registered successfully!") {
-        window.location.href = "dashboard.html";
     }
 });
