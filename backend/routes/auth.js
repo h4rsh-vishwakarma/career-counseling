@@ -1,29 +1,29 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { pool } = require("../models/db");
 const multer = require("multer");
 const path = require("path");
+const { pool } = require("../models/db");
 
-// Resume storage configuration
+const router = express.Router();
+
+// Multer setup for resume upload
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, "uploads/resume"),
+    destination: (req, file, cb) => {
+        cb(null, "uploads/resume");  // Make sure this folder exists
+    },
     filename: (req, file, cb) => {
         const uniqueName = `resume_${Date.now()}${path.extname(file.originalname)}`;
         cb(null, uniqueName);
     }
 });
-
 const upload = multer({ storage });
 
-
-const router = express.Router();
-
-// Register
-
-router.post("/register", async (req, res) => {
+// ==================== REGISTER ====================
+router.post("/register", upload.single("resume"), async (req, res) => {
     try {
         const { name, email, password, role, skills, education } = req.body;
+        const resumePath = req.file ? `/uploads/resume/${req.file.filename}` : null;
 
         // Check if the user already exists
         const [existingUser] = await pool.query("SELECT id FROM users WHERE email = ?", [email]);
@@ -36,8 +36,8 @@ router.post("/register", async (req, res) => {
 
         // Insert new user into the database
         await pool.query(
-            "INSERT INTO users (name, email, password, role, education, skills) VALUES (?, ?, ?, ?, ?, ?)",
-            [name, email, hashedPassword, role, education, skills]
+            "INSERT INTO users (name, email, password, role, education, skills, resume_path) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [name, email, hashedPassword, role, education, skills, resumePath]
         );
 
         return res.status(201).json({ message: "✅ Registration successful! You can now log in." });
@@ -45,7 +45,6 @@ router.post("/register", async (req, res) => {
     } catch (err) {
         console.error("❌ Server Error:", err);
 
-        // Handle duplicate entry error
         if (err.code === "ER_DUP_ENTRY") {
             return res.status(400).json({ message: "❌ This email is already registered. Try logging in instead." });
         }
@@ -54,8 +53,7 @@ router.post("/register", async (req, res) => {
     }
 });
 
-
-// Login
+// ==================== LOGIN ====================
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -76,10 +74,11 @@ router.post("/login", async (req, res) => {
         res.status(500).json({ message: "Server error", error });
     }
 });
+
+// ==================== LOGOUT ====================
 router.post("/logout", (req, res) => {
-    res.clearCookie("token"); // If using cookies
+    res.clearCookie("token");
     return res.json({ message: "Logged out successfully!" });
 });
-
 
 module.exports = router;
