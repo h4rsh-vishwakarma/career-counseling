@@ -11,30 +11,21 @@ dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
+
+// CORS Configuration
 const corsOptions = {
     origin: "https://harsh2292003.github.io", // Allow your frontend's origin
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
+    credentials: true, // Allow sending cookies/authorization headers
 };
 
-
-
-
-// Import Routes
-const authRoutes = require("./routes/auth");
-const userRoutes = require("./routes/user");
-const mentorshipRoutes = require("./routes/mentorship");
-const jobRoutes = require("./routes/jobAPI");
-const quizRoutes = require("./routes/quiz");
-const chatRoutes = require("./routes/chatRoutes");
-const { router: quizScoresRouter } = require("./routes/quizScores");
+// Middleware
+app.use(cors(corsOptions)); // Apply CORS options
 app.use(express.json());  // ✅ Needed for JSON request parsing
 app.use(express.urlencoded({ extended: true }));  // ✅ Needed for form data
 
-// Middleware
-app.use(cors());
-app.use(cors(corsOptions));
-
+// Serve static files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.get("/uploads/resume/:filename", (req, res) => {
     const filePath = path.join(__dirname, "uploads/resume", req.params.filename);
@@ -46,7 +37,14 @@ app.get("/uploads/resume/:filename", (req, res) => {
     });
 });
 
-
+// Import Routes
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
+const mentorshipRoutes = require("./routes/mentorship");
+const jobRoutes = require("./routes/jobAPI");
+const quizRoutes = require("./routes/quiz");
+const chatRoutes = require("./routes/chatRoutes");
+const { router: quizScoresRouter } = require("./routes/quizScores");
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -84,13 +82,14 @@ io.on("connection", (socket) => {
         io.emit("onlineUsers", Object.keys(onlineUsers));
     });
 });
+
+// Test Route
 app.get('/', (req, res) => {
   res.send('Career Counseling Backend is Live!');
 });
 
-
+// Start the server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
-
