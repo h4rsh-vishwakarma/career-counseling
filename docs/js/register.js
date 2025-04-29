@@ -1,6 +1,6 @@
 document.getElementById("registerForm").addEventListener("submit", async function(event) {
     event.preventDefault();
-    
+
     const name = document.getElementById("name").value;
     const email = document.getElementById("regEmail").value;
     const password = document.getElementById("regPassword").value;
@@ -8,38 +8,50 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     const role = document.getElementById("role").value;
     const skills = document.getElementById("skills").value;
     const education = document.getElementById("education").value;
+    const resume = document.getElementById("resume").files[0];
+    const loadingElement = document.getElementById("loading");
 
     if (password !== confirmPassword) {
         alert("❌ Passwords do not match!");
         return;
     }
 
-    // Create or select a loading element
-    let loadingElement = document.getElementById("loading");
-    if (!loadingElement) {
-        loadingElement = document.createElement("div");
-        loadingElement.id = "loading";
-        loadingElement.textContent = "Loading...";
-        loadingElement.style.cssText = "text-align: center; margin-top: 10px; font-size: 16px; color: #555;";
-        document.body.appendChild(loadingElement);
-    }
-
     // Show loading
     loadingElement.style.display = "block";
 
     try {
-        const response = await fetch("https://career-counseling.onrender.com/api/auth/register", {
+        // Step 1: Register User
+        const registerResponse = await fetch("https://career-counseling-backend.onrender.com/api/auth/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, email, password, role, skills, education })
         });
 
-        const data = await response.json();
-        alert(data.message);
+        const registerData = await registerResponse.json();
+        if (!registerResponse.ok) throw new Error(registerData.message);
 
-        if (data.message === "User registered successfully!") {
-            window.location.href = "dashboard.html"; // ✅ Redirect to Dashboard
+        alert(registerData.message);
+
+        // Step 2: Upload Resume (if registration is successful)
+        if (registerData.message === "User registered successfully!" && resume) {
+            const formData = new FormData();
+            formData.append("resume", resume);
+
+            const token = registerData.token; // Assuming the backend returns a token on successful registration
+            const uploadResponse = await fetch("https://career-counseling-backend.onrender.com/api/user/uploadResume", {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData
+            });
+
+            const uploadData = await uploadResponse.json();
+            if (!uploadResponse.ok) throw new Error(uploadData.message);
+
+            alert(uploadData.message);
         }
+
+        // Redirect to dashboard after registration
+        window.location.href = "dashboard.html";
     } catch (error) {
         console.error("❌ Error:", error);
         alert("❌ Registration failed. Please try again.");
