@@ -1,24 +1,27 @@
-document.getElementById("loginForm").addEventListener("submit", async function (event) {
+document.getElementById("loginForm").addEventListener("submit", async function(event) {
     event.preventDefault();
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    const loadingElement = document.getElementById("loading");
 
-    // Basic validation
-    if (!email || !password) {
-        alert("Email and password cannot be empty!");
-        return;
+    // Create or select a loading element
+    let loadingElement = document.getElementById("loading");
+    if (!loadingElement) {
+        loadingElement = document.createElement("div");
+        loadingElement.id = "loading";
+        loadingElement.textContent = "Loading...";
+        loadingElement.style.cssText = "text-align: center; margin-top: 10px; font-size: 16px; color: #555;";
+        document.body.appendChild(loadingElement);
     }
 
     // Show loading
     loadingElement.style.display = "block";
 
     try {
-        const response = await fetch("https://career-counseling-backend.onrender.com/api/auth/login", {
+        const response = await fetch("http://localhost:5000/api/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ email, password })
         });
 
         const data = await response.json();
@@ -32,7 +35,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
             alert("Login failed: " + data.message);
         }
     } catch (error) {
-        console.error("Fetch error:", error); // Debugging information
+        console.error("Error:", error);
         alert("An error occurred. Please try again.");
     } finally {
         // Hide loading
