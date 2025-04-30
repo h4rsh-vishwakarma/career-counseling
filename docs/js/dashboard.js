@@ -69,10 +69,10 @@ async function loadUserProfile() {
             // Fix View Resume Issue
             const resumeLink = document.getElementById("user-resume");
         
-            if (user.resume) {
-                resumeLink.href = `https://career-counseling.onrender.com/uploads/resume/${user.resume}`;
-                resumeLink.target = "_blank";
-                resumeLink.textContent = "View Resume";
+           const resumeLink = document.getElementById("user-resume");
+            resumeLink.href = `https://career-counseling.onrender.com/uploads/resume/${data.resumePath}`;
+            resumeLink.textContent = "View Resume";
+            resumeLink.target = "_blank";
             } else {
                 resumeLink.href = "#";
                 resumeLink.textContent = "No Resume Available";
