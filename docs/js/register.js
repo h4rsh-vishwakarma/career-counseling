@@ -1,8 +1,8 @@
 document.getElementById("registerForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const loading = document.getElementById("loading");
-    loading.style.display = "block"; // Show loading message
+    const loader = document.getElementById("loader");
+    loader.style.display = "block"; // ⏳ Show loader
 
     const form = e.target;
     const formData = new FormData();
@@ -14,7 +14,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     formData.append("role", form.role.value);
     formData.append("skills", form.skills.value);
     formData.append("education", form.education.value);
-    formData.append("resume", form.resume.files[0]);
+    formData.append("resume", form.resume.files[0]); // 📎 Add file
 
     try {
         const response = await fetch("https://career-counseling.onrender.com/api/auth/register", {
@@ -23,7 +23,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
         });
 
         const result = await response.json();
-        loading.style.display = "none"; // Hide loader after response
+        loader.style.display = "none"; // ✅ Hide loader
 
         if (!response.ok) {
             alert(result.message || "❌ Registration failed.");
@@ -31,9 +31,9 @@ document.getElementById("registerForm").addEventListener("submit", async functio
         }
 
         alert(result.message);
-        window.location.href = "login.html"; // Redirect to login on success
+        window.location.href = "login.html"; // ➡ Redirect on success
     } catch (err) {
-        loading.style.display = "none";
+        loader.style.display = "none";
         console.error("❌ Error:", err);
         alert("❌ Something went wrong. Please try again later.");
     }
