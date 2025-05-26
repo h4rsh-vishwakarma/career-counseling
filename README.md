@@ -37,31 +37,55 @@ Database: Railway (MySQL)
 Clone the repository
 
 bash
+
 Copy
+
 Edit
+
 git clone https://github.com/Harsh2292003/career-counseling.git
+
 Navigate to the project directory
 
 bash
+
 Copy
+
 Edit
+
 cd career-counseling
+
 Frontend Setup
+
 Open the frontend/ folder with Live Server.
+
 Backend Setup
+
 Install Node.js packages:
+
 bash
+
 Copy
+
 Edit
+
 cd backend
+
 npm install
+
 Run the backend server:
+
 bash
+
 Copy
+
 Edit
+
 npm start
+
 Database Setup
+
 Import the MySQL database schema provided.
+
 Update .env file with your database credentials.
 
 🎯 Future Improvements
