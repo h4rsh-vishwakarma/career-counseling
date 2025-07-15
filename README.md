@@ -1,6 +1,6 @@
 🎯 Career Counseling Platform
 Welcome to the Career Counseling Platform – a complete web application that bridges the gap between students and mentors.
-It offers personalized career guidance, mentorship programs, quizzes, job recommendations, and more to help users shape their career journey
+It offers personalized career guidance, mentorship programs, quizzes, job recommendations, and more to help users shape their career journey!
 
 🚀 Features
 Student & Mentor Registration
