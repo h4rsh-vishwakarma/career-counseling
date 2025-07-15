@@ -22,7 +22,7 @@ Admin Panel (optional)
 
 🛠️ Tech Stack
 Frontend: HTML, CSS, JavaScript
-Backend: Node.js, Express.js, Python (microservices)
+Backend: Node.js, Express.js, RESTFul APIs
 Database: MySQL
 Authentication: Custom Authentication (optional future integration with Google/Facebook login)
 
