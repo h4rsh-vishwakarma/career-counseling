@@ -14,7 +14,7 @@ const server = http.createServer(app);
 
 // CORS Configuration
 const corsOptions = {
-    origin: "https://harsh2292003.github.io", // Allow your frontend's origin
+    origin: "https://h4rsh-vishwakarma.github.io", // Allow your frontend's origin
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
     credentials: true, // Allow sending cookies/authorization headers
