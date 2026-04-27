@@ -61,7 +61,7 @@ socket.on("receiveMessage", ({ senderId, message }) => {
 
 function appendMessage(sender, message, type) {
     const msgDiv = document.createElement("div");
-    msgDiv.classList.add("chat-message", type);
+    msgDiv.classList.add("message", type);
     const strong = document.createElement("strong");
     strong.textContent = sender + ": ";
     const text = document.createTextNode(message);
@@ -75,7 +75,9 @@ function appendMessage(sender, message, type) {
 async function loadChatHistory() {
     if (!userId || !receiverId) return;
     try {
-        const response = await fetch(`${API_BASE}/api/chat/${userId}/${receiverId}`);
+        const response = await fetch(`${API_BASE}/api/chat/${userId}/${receiverId}`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        });
         const messages = await response.json();
         messages.forEach(msg => {
             const type = msg.senderId == userId ? "sent" : "received";

@@ -7,40 +7,20 @@ const fs = require("fs");
 
 const router = express.Router();
 
-/**
- * ✅ Ensure Upload Directories Exist
- */
-const ensureUploadFolder = (folder) => {
-    if (!fs.existsSync(folder)) {
-        fs.mkdirSync(folder, { recursive: true });
-    }
-};
+const profilePicDir = path.join(__dirname, "../uploads/profile_pics");
+const resumeDir = path.join(__dirname, "../uploads/resume");
+if (!fs.existsSync(profilePicDir)) fs.mkdirSync(profilePicDir, { recursive: true });
+if (!fs.existsSync(resumeDir)) fs.mkdirSync(resumeDir, { recursive: true });
 
-// ✅ Profile Pictures Storage
 const profileStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadPath = "uploads/profile_pics/";
-        ensureUploadFolder(uploadPath);
-        cb(null, uploadPath);
-    },
-    filename: (req, file, cb) => {
-        const userId = req.user ? req.user.id : req.body.userId || "default";
-        cb(null, `profile_${userId}${path.extname(file.originalname)}`);
-    }
+    destination: (req, file, cb) => cb(null, profilePicDir),
+    filename: (req, file, cb) => cb(null, `profile_${req.user.id}${path.extname(file.originalname)}`),
 });
 const uploadProfilePic = multer({ storage: profileStorage });
 
-// ✅ Resume Storage
 const resumeStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadPath = "uploads/resume/";
-        ensureUploadFolder(uploadPath);
-        cb(null, uploadPath);
-    },
-    filename: (req, file, cb) => {
-        const userId = req.user ? req.user.id : req.body.userId || "default";
-        cb(null, `resume_${userId}${path.extname(file.originalname)}`);
-    }
+    destination: (req, file, cb) => cb(null, resumeDir),
+    filename: (req, file, cb) => cb(null, `resume_${req.user.id}${path.extname(file.originalname)}`),
 });
 const uploadResume = multer({ storage: resumeStorage });
 
@@ -146,12 +126,23 @@ router.get("/progress", verifyToken, async (req, res) => {
  */
 router.get("/recent-activities", verifyToken, async (req, res) => {
     try {
-        const [recentQuizzes] = await pool.query("SELECT q.title FROM quiz_submissions qs JOIN quizzes q ON qs.quiz_id = q.id WHERE qs.user_id = ? ORDER BY qs.submitted_at DESC LIMIT 1", [req.user.id]);
-        const [recentMentorships] = await pool.query("SELECT ms.title FROM mentorship_participants mp JOIN mentorship_sessions ms ON mp.session_id = ms.id WHERE mp.student_id = ? ORDER BY ms.session_date DESC LIMIT 1", [req.user.id]);
-        const [recentJobs] = await pool.query("SELECT job_title FROM job_applications WHERE user_id = ? ORDER BY applied_date DESC LIMIT 1", [req.user.id]);
+        const [recentQuizzes] = await pool.query(
+            "SELECT quiz_category FROM quiz_submissions WHERE user_id = ? ORDER BY submitted_at DESC LIMIT 1",
+            [req.user.id]
+        );
+        const [recentMentorships] = await pool.query(
+            `SELECT ms.title FROM mentorship_requests mr
+             JOIN mentorship_sessions ms ON mr.session_id = ms.id
+             WHERE mr.student_id = ? ORDER BY mr.created_at DESC LIMIT 1`,
+            [req.user.id]
+        );
+        const [recentJobs] = await pool.query(
+            "SELECT job_title FROM job_applications WHERE user_id = ? ORDER BY applied_date DESC LIMIT 1",
+            [req.user.id]
+        );
 
         res.json({
-            lastQuiz: recentQuizzes.length > 0 ? recentQuizzes[0].title : "No quizzes taken",
+            lastQuiz: recentQuizzes.length > 0 ? recentQuizzes[0].quiz_category : "No quizzes taken",
             lastMentorship: recentMentorships.length > 0 ? recentMentorships[0].title : "No mentorships joined",
             lastJob: recentJobs.length > 0 ? recentJobs[0].job_title : "No job applications",
         });

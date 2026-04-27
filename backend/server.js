@@ -65,7 +65,6 @@ const jobApplyRoutes = require("./routes/jobs");
 const quizRoutes = require("./routes/quiz");
 const chatRoutes = require("./routes/chatRoutes");
 const youtubeRoutes = require("./routes/youtube");
-const { router: quizScoresRouter } = require("./routes/quizScores");
 
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/user", userRoutes);
@@ -75,7 +74,6 @@ app.use("/api/jobs", jobApplyRoutes);
 app.use("/api/quiz", quizRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/youtube", youtubeRoutes);
-app.use("/api/quiz/scores", quizScoresRouter);
 
 // Health check
 app.get("/health", (req, res) => res.json({ status: "ok" }));

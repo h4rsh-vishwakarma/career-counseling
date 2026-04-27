@@ -48,7 +48,13 @@ async function loadAvailableSessions() {
             btn.textContent = "Request Mentorship";
             btn.onclick = () => requestMentorship(session.id, btn);
 
+            const chatBtn = document.createElement("a");
+            chatBtn.className = "btn btn-sm btn-outline";
+            chatBtn.href = `chat.html?userId=${session.mentor_id}`;
+            chatBtn.textContent = "Chat with Mentor";
+
             actions.appendChild(btn);
+            actions.appendChild(chatBtn);
             card.appendChild(title);
             card.appendChild(desc);
             card.appendChild(meta);

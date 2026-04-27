@@ -107,7 +107,7 @@ async function deleteSession(sessionId) {
     if (!confirm("Delete this session?")) return;
 
     try {
-        const response = await fetch(`${API_BASE}/api/mentorship/delete/${sessionId}`, {
+        const response = await fetch(`${API_BASE}/api/mentorship/sessions/${sessionId}`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
