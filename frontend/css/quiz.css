@@ -1,107 +1,37 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-image: url('Welcome\ !\ Our\ career\ counseling.png') ;
-    background-size: cover;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    height: 100%;
-    width: 100%;
-    overflow: auto;
-    position: relative;
+.quiz-section {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--r-xl); padding: 1.5rem;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem;
 }
 
-header {
-    width: 100%;
-  
-    color: white;
-    padding: 15px 0;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    
-    top: 0;
-    left: 0;
-    z-index: 1000;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 15px;
-}
-
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-nav ul li a:hover {
-    color: #ffd700;
-}
-.quiz-section{
-    color: white;
-}
-/* Background Styling */
-body {
-    background-color: #282c36;
-    font-family: Arial, sans-serif;
-    color: white;
-}
-
-/* Quiz Container */
 #quiz-container {
-    background-color: #333;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--r-xl); padding: 1.5rem; margin-bottom: 2rem;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
 
-/* Question Styling */
+#quiz-container h3 { margin-bottom: 1.25rem; }
+
 .question-box {
-    background-color: #444;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
+    margin-bottom: 1.5rem; padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
 }
+.question-box:last-child { border-bottom: none; margin-bottom: 0; }
 
-.question-text {
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-}
+.question-text { font-weight: 600; margin-bottom: 0.75rem; line-height: 1.5; }
 
-/* Answer Options */
 .option-label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    margin-top: 5px;
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.5rem 0.75rem; margin-bottom: 0.35rem;
+    border-radius: var(--r-sm); cursor: pointer;
+    border: 1px solid transparent; transition: var(--ease);
 }
+.option-label:hover { background: rgba(255,255,255,0.05); border-color: var(--border); }
+.option-label input[type="radio"] { accent-color: var(--primary); width: 16px; height: 16px; flex-shrink: 0; }
+.option-text { font-size: 0.9rem; }
 
-.option-label input[type="radio"] {
-    margin-right: 10px;
-}
-
-.option-text {
-    color: yellow;
-    font-size: 16px;
-}
-
-/* Score Message */
 #score-message {
-    background-color: #222;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    display: none;
-    margin-top: 15px;
+    color: var(--success); font-weight: 700;
+    font-size: 1.1rem; text-align: center; margin-top: 1rem;
 }

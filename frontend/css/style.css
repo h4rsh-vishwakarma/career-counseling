@@ -1,238 +1,37 @@
-/* Screen-reader only utility */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
-    white-space: nowrap;
-    border: 0;
-}
-
-/* Global Styles with Smooth Transitions */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    transition: all 0.3s ease-in-out;
+.hero {
+    text-align: center; padding: 5rem 1rem 3rem;
 }
 .hero h2 {
-    font-size: 3em;
-    margin-bottom: 0.5em;
-    color: #0fecc7;
+    font-size: clamp(1.75rem, 4vw, 3rem); font-weight: 800; margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--primary-light), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-.hero p{
-    font-size: 1.5em;
-    color: #f1cc64;
-}
+.hero p { font-size: 1.1rem; color: var(--text-2); margin-bottom: 2rem; }
 
-/* Background Image */
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-image: url('Welcome\ !\ Our\ career\ counseling.png') ;
-    background-size: cover;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    height: 100%;
-    width: 100%;
-    overflow: auto;
-    position: relative;
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem; margin-bottom: 3rem;
 }
 
-header {
-    width: 100%;
-  
-    color: white;
-    padding: 15px 0;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    
-    top: 0;
-    left: 0;
-    z-index: 1000;
+.feature {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--r-xl); padding: 2rem;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    transition: var(--ease); text-align: center;
 }
-
-nav ul {
-    list-style: none;
-    padding: 0;
+.feature:hover {
+    border-color: var(--border-accent); transform: translateY(-3px); box-shadow: var(--glow);
 }
-
-nav ul li {
-    display: inline;
-    margin: 0 15px;
+.feature h2, .feature h3 {
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, var(--primary-light), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
+.feature .button2 {
+    display: inline-block; margin-top: 0.5rem; font-size: 0.875rem;
+    color: var(--text-2); background: none; border: none;
+    padding: 0; box-shadow: none; text-decoration: none; transition: color 0.2s;
+    -webkit-text-fill-color: var(--text-2);
 }
-
-nav ul li a:hover {
-    color: #ffd700;
-}
-
-.button {
-    border-radius: 3px;
-    background-color: #f4971e;
-    border: none;
-    color: #FFFFFF;
-    text-align: center;
-    font-size: 20px;
-    padding: 15px;
-    width: px;
-    transition: all 0.5s;
-    cursor: pointer;
-    margin: 5px;
-  }
-  
-  .button span {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.5s;
-  }
-  
-  .button span:after {
-    content: '\00bb';
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: -20px;
-    transition: 0.5s;
-  }
-  
-  .button:hover span {
-    padding-right: 25px;
-  }
-  
-  .button:hover span:after {
-    opacity: 1;
-    right: 0;
-  }
-  .button2 {
-    border-radius: 3px;
-  
-    border: none;
-    color: #111010;
-    text-align: center;
-    font-size: 20px;
-    padding: 15px;
-    width: 20px;
-    transition: all 0.5s;
-    cursor: pointer;
-    margin: 5px;
-  }
-  
-  .button2 span {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.5s;
-  }
-  
-  .button2 span:after {
-    content: '\00bb';
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: -20px;
-    transition: 0.5s;
-  }
-  
-  .button2:hover span {
-    padding-right: 25px;
-  }
-  
-  .button2:hover span:after {
-    opacity: 1;
-    right: 0;
-  }
-/* Header Navigation Animation */
-
-
-
-/* Styled Buttons */
-
-button {
-    padding: 12px 18px;
-    border: none;
-    background: linear-gradient(to right, #ff416c, #ff4b2b);
-    color: white;
-    font-size: 1.1em;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out, background 0.3s ease-in-out;
-}
-
-button:hover {
-    background: linear-gradient(to right, #ff4b2b, #ff416c);
-    transform: scale(1.1);
-    box-shadow: 0 4px 10px rgba(255, 75, 43, 0.5);
-}
-
-
-/* Card Animations */
-
-.service,
-.feature,
-.job,
-.quiz-section {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    color: black;
-}
-
-.service:hover,
-.feature:hover,
-.job:hover,
-.quiz-section:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-
-/* Fade-in Animation */
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 0.5;
-    }
-}
-
-
-/* Smooth Page Transition */
-
-html {
-    scroll-behavior: smooth;
-}
-
-
-/* Modal Animation */
-
-.modal {
-    opacity: 0;
-    transform: scale(0.8);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.modal.show {
-    opacity: 1;
-    transform: scale(1);
-}
+.feature .button2:hover { color: var(--text); transform: none; box-shadow: none; -webkit-text-fill-color: var(--text); }

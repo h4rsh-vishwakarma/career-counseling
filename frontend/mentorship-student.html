@@ -5,32 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Browse and join mentorship sessions from expert mentors on Career Counseling Platform.">
     <title>Student Mentorship - Career Counseling</title>
+    <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/mentorship.css">
 </head>
 <body>
     <header>
-        <h1>Mentorship Opportunities</h1>
+        <h1>Career Counseling</h1>
         <nav>
             <ul>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a href="mentorship-student.html">Mentorship</a></li>
-                <li><a href="#" onclick="logout()">Logout</a></li>
+                <li><a href="jobs.html">Jobs</a></li>
+                <li><a href="quiz.html">Quizzes</a></li>
+                <li><a href="youtube.html">Videos</a></li>
+                <li><a href="chat.html">Chat</a></li>
+                <li><a href="#" onclick="logout(); return false;">Logout</a></li>
             </ul>
         </nav>
+        <button id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
-    <section class="available-sessions">
-        <h2>Available Mentorship Sessions</h2>
-        <div id="sessions-container" aria-live="polite">
-            <p>Loading available sessions...</p>
-        </div>
-    </section>
+    <div class="page-wrapper">
+        <h1 class="section-title">Mentorship Sessions</h1>
+        <p class="section-sub">Browse available sessions from experienced mentors.</p>
+
+        <section class="available-sessions">
+            <h2>Available Sessions</h2>
+            <div id="sessions-container" aria-live="polite">
+                <div class="spinner"></div>
+            </div>
+        </section>
+    </div>
 
     <footer>
         <p>&copy; 2025 Career Counseling. All rights reserved.</p>
     </footer>
 
     <script src="js/logout.js"></script>
+    <script src="js/nav.js" defer></script>
     <script src="js/mentorship-student.js" defer></script>
 </body>
 </html>

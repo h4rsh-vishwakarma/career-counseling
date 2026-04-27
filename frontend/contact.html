@@ -9,34 +9,40 @@
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary">
     <title>Contact Us - Career Counseling</title>
+    <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/contact.css">
 </head>
 <body>
     <header>
-        <h1>Contact Us</h1>
+        <h1>Career Counseling</h1>
         <nav>
             <ul>
-                <li><a href="dashboard.html">Home</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
-                <li><a id="mentorshipLink" href="mentorship-student.html">Mentorship</a></li>
                 <li><a href="service.html">Services</a></li>
                 <li><a href="jobs.html">Jobs</a></li>
-                <li><a href="#" onclick="logout()">Logout</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
             </ul>
         </nav>
+        <button id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
-    <section class="contact-form">
-        <h2>Get in Touch</h2>
-        <p>If you have any questions or need assistance, feel free to reach out to us.</p>
-        <a href="https://forms.gle/qGPLhwFH5KzG7wEV7" class="button" target="_blank" rel="noopener noreferrer">Contact Form</a>
-    </section>
+    <div class="page-wrapper">
+        <section class="contact-form">
+            <h2>Get in Touch</h2>
+            <p>Have questions or need assistance? We're here to help you on your career journey.</p>
+            <a href="https://forms.gle/qGPLhwFH5KzG7wEV7" class="btn" target="_blank" rel="noopener noreferrer">Open Contact Form</a>
+        </section>
+    </div>
 
     <footer>
         <p>&copy; 2025 Career Counseling. All rights reserved.</p>
     </footer>
 
-    <script src="js/logout.js"></script>
-    <script src="js/nav.js"></script>
+    <script src="js/nav.js" defer></script>
 </body>
 </html>

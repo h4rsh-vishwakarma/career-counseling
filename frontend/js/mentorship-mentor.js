@@ -1,185 +1,193 @@
 const API_BASE = "https://career-counseling-backend.onrender.com";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
+    if (!localStorage.getItem("token")) {
         window.location.href = "login.html";
         return;
     }
-
     loadSessions();
     loadMentorshipRequests();
 
-    document.getElementById("create-session-form").addEventListener("submit", async function (e) {
+    document.getElementById("create-session-form").addEventListener("submit", async (e) => {
         e.preventDefault();
         await createSession();
     });
 });
 
-// ✅ Function to Load Mentor Sessions
 async function loadSessions() {
-    const sessionsContainer = document.getElementById("sessions-container");
-    sessionsContainer.innerHTML = "<p>Loading your sessions...</p>";
+    const container = document.getElementById("sessions-container");
+    container.innerHTML = '<div class="spinner"></div>';
 
     try {
-        const response = await fetch("${API_BASE}/api/mentorship/sessions", {
-            headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
+        const response = await fetch(`${API_BASE}/api/mentorship/sessions`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
-
         if (!response.ok) throw new Error("Failed to fetch sessions");
 
         const sessions = await response.json();
-        sessionsContainer.innerHTML = "";
+        container.innerHTML = "";
 
         if (sessions.length === 0) {
-            sessionsContainer.innerHTML = "<p>No upcoming sessions found.</p>";
+            container.innerHTML = '<div class="empty-state"><div class="icon">📅</div><h3>No Sessions Yet</h3><p>Create your first mentorship session above.</p></div>';
             return;
         }
 
         sessions.forEach(session => {
-            const sessionDiv = document.createElement("div");
-            sessionDiv.classList.add("session");
-            sessionDiv.innerHTML = `
-                <h3>${session.title}</h3>
-                <p>${session.description}</p>
-                <p><strong>Date:</strong> ${session.session_date} <strong>Time:</strong> ${session.session_time}</p>
-                <p><strong>Mode:</strong> ${session.mode}</p>
-                <button class="delete-btn" onclick="deleteSession(${session.id})">🗑️ Delete</button>
-            `;
-            sessionsContainer.appendChild(sessionDiv);
+            const card = document.createElement("div");
+            card.className = "session-card";
+
+            const title = document.createElement("h4");
+            title.textContent = session.title;
+
+            const desc = document.createElement("p");
+            desc.textContent = session.description;
+
+            const meta = document.createElement("p");
+            const dateStr = new Date(session.session_date).toLocaleDateString();
+            meta.innerHTML = `<strong>Date:</strong> ${dateStr} &nbsp; <strong>Time:</strong> ${session.session_time} &nbsp; <strong>Mode:</strong> ${session.mode}`;
+
+            const actions = document.createElement("div");
+            actions.className = "card-actions";
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "btn btn-sm btn-danger";
+            deleteBtn.textContent = "Delete";
+            deleteBtn.onclick = () => deleteSession(session.id);
+
+            actions.appendChild(deleteBtn);
+            card.appendChild(title);
+            card.appendChild(desc);
+            card.appendChild(meta);
+            card.appendChild(actions);
+            container.appendChild(card);
         });
     } catch (error) {
-        console.error("❌ Error loading sessions:", error);
-        sessionsContainer.innerHTML = "<p>Failed to load sessions.</p>";
+        console.error("Error loading sessions:", error);
+        document.getElementById("sessions-container").innerHTML = "<p>Failed to load sessions.</p>";
     }
 }
 
-// ✅ Function to Create a Mentorship Session
 async function createSession() {
-    const title = document.getElementById("title").value;
-    const description = document.getElementById("description").value;
-    const session_date = document.getElementById("session_date").value;
-    const session_time = document.getElementById("session_time").value;
-    const mode = document.getElementById("mode").value;
+    const submitBtn = document.querySelector("#create-session-form button[type='submit']");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Creating...";
+
+    const payload = {
+        title: document.getElementById("title").value,
+        description: document.getElementById("description").value,
+        session_date: document.getElementById("session_date").value,
+        session_time: document.getElementById("session_time").value,
+        mode: document.getElementById("mode").value,
+    };
 
     try {
-        const response = await fetch("${API_BASE}/api/mentorship/create-session", {
+        const response = await fetch(`${API_BASE}/api/mentorship/create-session`, {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ title, description, session_date, session_time, mode })
+            body: JSON.stringify(payload)
         });
-
         const result = await response.json();
         if (!response.ok) throw new Error(result.message || "Failed to create session");
 
-        alert("Session created successfully!");
-        loadSessions(); // Reload after creation
+        document.getElementById("create-session-form").reset();
+        loadSessions();
     } catch (error) {
-        console.error("❌ Error:", error);
-        alert("Error creating session: " + error.message);
+        console.error("Error creating session:", error);
+        alert("Error: " + error.message);
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Create Session";
     }
 }
 
-// ✅ Function to Delete a Session
 async function deleteSession(sessionId) {
-    if (!confirm("Are you sure you want to delete this session?")) return;
+    if (!confirm("Delete this session?")) return;
 
     try {
         const response = await fetch(`${API_BASE}/api/mentorship/delete/${sessionId}`, {
             method: "DELETE",
-            headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
-
         const data = await response.json();
         if (!response.ok) throw new Error(data.message);
-
-        alert(data.message);
-        loadSessions(); // Reload after deletion
+        loadSessions();
     } catch (error) {
-        console.error("❌ Error deleting session:", error);
-        alert("Failed to delete session!");
+        console.error("Error deleting session:", error);
+        alert("Failed to delete session.");
     }
 }
 
-// ✅ Function to Load Mentorship Requests
 async function loadMentorshipRequests() {
-    try {
-        const response = await fetch("${API_BASE}/api/mentorship/requests", {
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
-            }
-        });
+    const container = document.getElementById("mentor-requests-container");
+    container.innerHTML = '<div class="spinner"></div>';
 
+    try {
+        const response = await fetch(`${API_BASE}/api/mentorship/requests`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        });
         const requests = await response.json();
-        const container = document.getElementById("mentor-requests-container");
         container.innerHTML = "";
 
-        if (requests.length === 0) {
-            container.innerHTML = "<p>No mentorship requests found.</p>";
+        if (!Array.isArray(requests) || requests.length === 0) {
+            container.innerHTML = '<div class="empty-state"><div class="icon">📬</div><h3>No Requests</h3><p>No pending mentorship requests.</p></div>';
             return;
         }
 
         requests.forEach(request => {
-            const requestElement = document.createElement("div");
-            requestElement.classList.add("request");
-            requestElement.innerHTML = `
-                <p><strong>Student:</strong> ${request.student_name}</p>
-                <p><strong>Message:</strong> ${request.message}</p>
-                <button onclick="acceptRequest(${request.id})">Accept</button>
-                <button onclick="rejectRequest(${request.id})">Reject</button>
-            `;
-            container.appendChild(requestElement);
+            const card = document.createElement("div");
+            card.className = "request-card";
+
+            const info = document.createElement("div");
+            info.className = "request-info";
+
+            const studentP = document.createElement("p");
+            studentP.innerHTML = `<strong>Student:</strong> ${request.student_name || "Unknown"}`;
+
+            info.appendChild(studentP);
+
+            const actions = document.createElement("div");
+            actions.className = "request-actions";
+
+            const acceptBtn = document.createElement("button");
+            acceptBtn.className = "btn btn-sm btn-success";
+            acceptBtn.textContent = "Accept";
+            acceptBtn.onclick = () => respondRequest(request.id, "accepted", card);
+
+            const rejectBtn = document.createElement("button");
+            rejectBtn.className = "btn btn-sm btn-danger";
+            rejectBtn.textContent = "Reject";
+            rejectBtn.onclick = () => respondRequest(request.id, "rejected", card);
+
+            actions.appendChild(acceptBtn);
+            actions.appendChild(rejectBtn);
+            card.appendChild(info);
+            card.appendChild(actions);
+            container.appendChild(card);
         });
     } catch (error) {
-        console.error("❌ Error loading mentorship requests:", error);
+        console.error("Error loading requests:", error);
+        container.innerHTML = "<p>Failed to load requests.</p>";
     }
 }
 
-// ✅ Function to Accept a Mentorship Request
-async function acceptRequest(requestId) {
+async function respondRequest(requestId, status, card) {
     try {
         const response = await fetch(`${API_BASE}/api/mentorship/requests/${requestId}`, {
             method: "PUT",
-            headers: { 
+            headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
+                Authorization: `Bearer ${localStorage.getItem("token")}`
             },
-            body: JSON.stringify({ requestId, status: 'accepted' })
+            body: JSON.stringify({ requestId, status })
         });
-
         const result = await response.json();
         if (!response.ok) throw new Error(result.message);
-
-        alert("Mentorship request accepted!");
-        loadMentorshipRequests();
+        card.remove();
     } catch (error) {
-        console.error("❌ Error accepting request:", error);
-        alert("Failed to accept request!");
-    }
-}
-
-// ✅ Function to Reject a Mentorship Request
-async function rejectRequest(requestId) {
-    try {
-        const response = await fetch(`${API_BASE}/api/mentorship/requests/${requestId}`, {
-            method: "PUT",
-            headers: { 
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`
-            },
-            body: JSON.stringify({ requestId, status: 'rejected' })
-        });
-
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.message);
-
-        alert("Mentorship request rejected!");
-        loadMentorshipRequests();
-    } catch (error) {
-        console.error("❌ Error rejecting request:", error);
-        alert("Failed to reject request!");
+        console.error("Error responding to request:", error);
+        alert("Failed to update request.");
     }
 }

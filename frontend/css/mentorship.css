@@ -1,174 +1,35 @@
-/* Header Section */
-header {
-    width: 100%;
-  
-    color: white;
-    padding: 15px 0;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    
-    top: 0;
-    left: 0;
-    z-index: 1000;
+.available-sessions, .create-session,
+.mentor-requests, .mentor-sessions { margin-bottom: 2rem; }
+
+.create-session h3, .mentor-requests h3,
+.mentor-sessions h2, .available-sessions h2 { margin-bottom: 1rem; }
+
+.session-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--r-lg); padding: 1.25rem; margin-bottom: 1rem;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    transition: var(--ease);
+}
+.session-card:hover {
+    border-color: var(--border-accent); transform: translateY(-2px); box-shadow: var(--glow);
+}
+.session-card h4 { margin-bottom: 0.5rem; font-size: 1rem; }
+.session-card p { font-size: 0.875rem; color: var(--text-2); margin-bottom: 0.25rem; }
+.session-card .card-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; }
+
+.create-session form {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--r-xl); padding: 1.5rem;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
 }
 
-nav ul {
-    list-style: none;
-    padding: 0;
+.request-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--r-lg); padding: 1.25rem; margin-bottom: 1rem;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
 }
-
-nav ul li {
-    display: inline;
-    margin: 0 15px;
-}
-
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-nav ul li a:hover {
-    color: #ffd700;
-}
-
-/*body */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-image: url('Welcome\ !\ Our\ career\ counseling.png') ;
-    background-size: cover;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    height: 100%;
-    width: 100%;
-    overflow: auto;
-    position: relative;
-}
-.mentor-dashboard{
-    color: #dff41e;
-}
-.mentorship-list{
-    color: #ffd700;
-}
-.contact-form{
-    color: thistle;
-}
-footer{
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: black;
-    color: white;
-    text-align: center;
-}
-.mentorship{
-    color: #ffd700;
-}
-.button {
-    border-radius: 3px;
-    background-color: #dff41e;
-    border: none;
-    color: #380606;
-    text-align: center;
-    font-size: 20px;
-    padding: 10px;
-    width: 200px;
-    transition: all 0.5s;
-    cursor: pointer;
-    margin: 5px;
-  }
-  
-  .button span {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.5s;
-  }
-  
-  .button span:after {
-    content: '\00bb';
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: -20px;
-    transition: 0.5s;
-  }
-  
-  .button:hover span {
-    padding-right: 25px;
-  }
-  
-  .button:hover span:after {
-    opacity: 1;
-    right: 0;
-  }
-  .session-item {
-    background: #f9f9f9;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.session-item h3 {
-    color: #333;
-}
-
-.session-item p {
-    font-size: 14px;
-    color: #666;
-}
-
-.join-session-btn {
-    background: #28a745;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.join-session-btn:hover {
-    background: #218838;
-}
-.mentor-sessions {
-    margin-top: 20px;
-    padding: 15px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.session {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-.delete-btn {
-    background-color: #ff4c4c;
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.delete-btn:hover {
-    background-color: #cc0000;
-}
-.create-session
-{
-    color: #dfca57;
-}
-.mentor-requests{
-    color: #d6c66d;
-}
-.available-sessions{
-    color: #d6c66d;
-}
+.request-info p { font-size: 0.875rem; color: var(--text-2); }
+.request-info strong { color: var(--text); }
+.request-actions { display: flex; gap: 0.5rem; }

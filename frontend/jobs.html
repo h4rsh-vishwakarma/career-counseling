@@ -9,58 +9,69 @@
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary">
     <title>Jobs - Career Counseling</title>
+    <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/jobs.css">
     <script src="js/jobs.js" defer></script>
 </head>
 <body>
     <header>
-        <h1>Job Opportunities</h1>
+        <h1>Career Counseling</h1>
         <nav>
             <ul>
-                <li><a href="dashboard.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a id="mentorshipLink" href="mentorship-student.html">Mentorship</a></li>
-                <li><a href="service.html">Services</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="#" onclick="logout()">Logout</a></li>
+                <li><a href="jobs.html">Jobs</a></li>
+                <li><a href="quiz.html">Quizzes</a></li>
+                <li><a href="youtube.html">Videos</a></li>
+                <li><a href="chat.html">Chat</a></li>
+                <li><a href="#" onclick="logout(); return false;">Logout</a></li>
             </ul>
         </nav>
+        <button id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
-    <section class="job-search">
-        <h2>Find Your Dream Job</h2>
-        <label for="qualification">Select Your Qualification:</label>
-        <select id="qualification">
-            <option value="10th">10th Pass</option>
-            <option value="12th">12th Pass</option>
-            <option value="undergraduate">Undergraduate</option>
-            <option value="postgraduate">Postgraduate</option>
-        </select>
+    <div class="page-wrapper">
+        <h1 class="section-title">Job Opportunities</h1>
+        <p class="section-sub">Find roles matched to your qualification and field.</p>
 
-        <label for="stream">Select Your Stream:</label>
-        <select id="stream">
-            <option value="science">Science</option>
-            <option value="commerce">Commerce</option>
-            <option value="arts">Arts</option>
-            <option value="engineering">Engineering</option>
-            <option value="medical">Medical</option>
-        </select>
-        <br><br>
-        <button class="button" onclick="fetchJobs()"><span>Search Jobs</span></button>
-    </section>
+        <section class="job-search">
+            <h2>Find Your Dream Job</h2>
+            <div class="form-group">
+                <label for="qualification">Your Qualification</label>
+                <select id="qualification">
+                    <option value="10th">10th Pass</option>
+                    <option value="12th">12th Pass</option>
+                    <option value="undergraduate">Undergraduate</option>
+                    <option value="postgraduate">Postgraduate</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="stream">Your Stream</label>
+                <select id="stream">
+                    <option value="science">Science</option>
+                    <option value="commerce">Commerce</option>
+                    <option value="arts">Arts</option>
+                    <option value="engineering">Engineering</option>
+                    <option value="medical">Medical</option>
+                </select>
+            </div>
+            <button class="btn" onclick="fetchJobs()">Search Jobs</button>
+        </section>
 
-    <section id="job-listings">
-        <h2>Job Results</h2>
-        <p>Select your qualification and stream, then click Search Jobs to see relevant listings.</p>
-        <p id="loadingMessage" style="display:none; color: blue;" aria-live="polite">Loading jobs...</p>
-        <div id="jobsContainer" aria-live="polite"></div>
-    </section>
+        <section id="job-listings">
+            <h2>Job Results</h2>
+            <p id="loadingMessage" style="display:none;" aria-live="polite">Loading jobs...</p>
+            <div id="jobsContainer" aria-live="polite"></div>
+        </section>
+    </div>
 
     <footer>
         <p>&copy; 2025 Career Counseling. All rights reserved.</p>
     </footer>
 
     <script src="js/logout.js"></script>
-    <script src="js/nav.js"></script>
+    <script src="js/nav.js" defer></script>
 </body>
 </html>

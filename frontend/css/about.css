@@ -1,66 +1,8 @@
-/* Header Section */
-header {
-    width: 100%;
-  
-    color: white;
-    padding: 15px 0;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    
-    top: 0;
-    left: 0;
-    z-index: 1000;
+.about {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: var(--r-xl); padding: 3rem 2.5rem;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    max-width: 700px; margin: 0 auto; text-align: center;
 }
-
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 15px;
-}
-
-nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-nav ul li a:hover {
-    color: #ffd700;
-}
-
-/*body */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-image: url('Welcome\ !\ Our\ career\ counseling.png') ;
-    background-size: cover;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    height: 100%;
-    width: 100%;
-    overflow: auto;
-    position: relative;
-}
-.contact-form{
-    color: thistle;
-}
-footer{
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: black;
-    color: white;
-    text-align: center;
-}
-.about{
-    color: thistle;
-}
+.about h2 { margin-bottom: 1rem; font-size: 1.5rem; }
+.about p { color: var(--text-2); line-height: 1.8; }

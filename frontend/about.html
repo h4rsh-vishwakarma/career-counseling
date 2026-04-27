@@ -9,33 +9,39 @@
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary">
     <title>About Us - Career Counseling</title>
+    <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/about.css">
 </head>
 <body>
     <header>
-        <h1>About Us</h1>
+        <h1>Career Counseling</h1>
         <nav>
             <ul>
-                <li><a href="dashboard.html">Home</a></li>
-                <li><a id="mentorshipLink" href="mentorship-student.html">Mentorship</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
                 <li><a href="service.html">Services</a></li>
                 <li><a href="jobs.html">Jobs</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <li><a href="#" onclick="logout()">Logout</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
             </ul>
         </nav>
+        <button id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
-    <section class="about">
-        <h2>Empowering Students for a Brighter Future</h2>
-        <p>We provide career counseling and mentorship to help students make informed decisions about their future.</p>
-    </section>
+    <div class="page-wrapper">
+        <section class="about">
+            <h2>Empowering Students for a Brighter Future</h2>
+            <p>We provide career counseling and mentorship to help students make informed decisions about their future. Our platform connects you with experienced professionals who have walked the path you aspire to take.</p>
+        </section>
+    </div>
 
     <footer>
         <p>&copy; 2025 Career Counseling. All rights reserved.</p>
     </footer>
 
-    <script src="js/logout.js"></script>
-    <script src="js/nav.js"></script>
+    <script src="js/nav.js" defer></script>
 </body>
 </html>

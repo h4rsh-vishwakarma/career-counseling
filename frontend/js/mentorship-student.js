@@ -1,8 +1,7 @@
 const API_BASE = "https://career-counseling-backend.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
+    if (!localStorage.getItem("token")) {
         window.location.href = "login.html";
         return;
     }
@@ -10,8 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function loadAvailableSessions() {
-    const sessionsContainer = document.getElementById("sessions-container");
-    sessionsContainer.innerHTML = "<p>Loading available sessions...</p>";
+    const container = document.getElementById("sessions-container");
+    container.innerHTML = '<div class="spinner"></div>';
 
     try {
         const response = await fetch(`${API_BASE}/api/mentorship/available-sessions`, {
@@ -20,39 +19,51 @@ async function loadAvailableSessions() {
         if (!response.ok) throw new Error("Failed to fetch sessions");
 
         const sessions = await response.json();
-        sessionsContainer.innerHTML = "";
+        container.innerHTML = "";
 
         if (sessions.length === 0) {
-            sessionsContainer.innerHTML = "<p>No mentorship sessions available.</p>";
+            container.innerHTML = '<div class="empty-state"><div class="icon">📅</div><h3>No Sessions Available</h3><p>Check back later for new mentorship sessions.</p></div>';
             return;
         }
 
         sessions.forEach(session => {
-            const sessionDiv = document.createElement("div");
-            sessionDiv.classList.add("session");
-            const title = document.createElement("h3");
+            const card = document.createElement("div");
+            card.className = "session-card";
+
+            const title = document.createElement("h4");
             title.textContent = session.title;
+
             const desc = document.createElement("p");
             desc.textContent = session.description;
+
             const meta = document.createElement("p");
-            meta.innerHTML = `<strong>Date:</strong> ${session.session_date} <strong>Time:</strong> ${session.session_time} <strong>Mode:</strong> ${session.mode}`;
+            const dateStr = new Date(session.session_date).toLocaleDateString();
+            meta.innerHTML = `<strong>Date:</strong> ${dateStr} &nbsp; <strong>Time:</strong> ${session.session_time} &nbsp; <strong>Mode:</strong> ${session.mode}`;
+
+            const actions = document.createElement("div");
+            actions.className = "card-actions";
+
             const btn = document.createElement("button");
-            btn.className = "request-btn";
+            btn.className = "btn btn-sm";
             btn.textContent = "Request Mentorship";
-            btn.onclick = () => requestMentorship(session.id);
-            sessionDiv.appendChild(title);
-            sessionDiv.appendChild(desc);
-            sessionDiv.appendChild(meta);
-            sessionDiv.appendChild(btn);
-            sessionsContainer.appendChild(sessionDiv);
+            btn.onclick = () => requestMentorship(session.id, btn);
+
+            actions.appendChild(btn);
+            card.appendChild(title);
+            card.appendChild(desc);
+            card.appendChild(meta);
+            card.appendChild(actions);
+            container.appendChild(card);
         });
     } catch (error) {
         console.error("Error loading sessions:", error);
-        document.getElementById("sessions-container").innerHTML = "<p>Failed to load sessions.</p>";
+        container.innerHTML = "<p>Failed to load sessions. Please refresh.</p>";
     }
 }
 
-async function requestMentorship(sessionId) {
+async function requestMentorship(sessionId, btn) {
+    btn.disabled = true;
+    btn.textContent = "Requesting...";
     try {
         const response = await fetch(`${API_BASE}/api/mentorship/request`, {
             method: "POST",
@@ -64,9 +75,12 @@ async function requestMentorship(sessionId) {
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.message);
-        alert(data.message);
+        btn.textContent = "Requested";
+        btn.className = "btn btn-sm btn-success";
     } catch (error) {
         console.error("Error requesting mentorship:", error);
-        alert("Failed to request mentorship!");
+        alert(error.message || "Failed to request mentorship.");
+        btn.disabled = false;
+        btn.textContent = "Request Mentorship";
     }
 }

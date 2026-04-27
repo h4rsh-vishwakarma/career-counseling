@@ -1,49 +1,46 @@
 const express = require("express");
-const puppeteer = require("puppeteer");
+const { pool } = require("../models/db");
+const verifyToken = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-router.get("/jobs", async (req, res) => {
-    const { skills, location } = req.query;
-
-    if (!skills || !location) {
-        return res.status(400).json({ message: "Skills and location are required!" });
+// Save a job application
+router.post("/apply", verifyToken, async (req, res) => {
+    const { job_title, company, job_link } = req.body;
+    if (!job_title || !company) {
+        return res.status(400).json({ message: "job_title and company are required" });
     }
-
-    let jobResults = [];
-    const browser = await puppeteer.launch({ headless: true }); // Headless mode
-    const page = await browser.newPage();
-
-    await page.setUserAgent(
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
-    );
-    await page.setJavaScriptEnabled(true);
-
     try {
-        const indeedUrl = `https://in.indeed.com/jobs?q=${encodeURIComponent(skills)}&l=${encodeURIComponent(location)}`;
-        console.log("🔹 Navigating to:", indeedUrl);
-
-        await page.goto(indeedUrl, { waitUntil: "networkidle2" });
-
-        await page.waitForSelector(".job_seen_beacon h2", { timeout: 10000 });
-
-        // Extract job titles
-        const jobTitles = await page.evaluate(() =>
-            Array.from(document.querySelectorAll(".job_seen_beacon h2 span")).map((el) => el.innerText.trim())
+        // Prevent duplicate applications for same job by same user
+        const [existing] = await pool.query(
+            "SELECT id FROM job_applications WHERE user_id = ? AND job_title = ? AND company = ?",
+            [req.user.id, job_title, company]
         );
-        console.log("🔹 Extracted Job Titles:", jobTitles);
-
+        if (existing.length > 0) {
+            return res.status(409).json({ message: "You have already applied for this job." });
+        }
+        await pool.query(
+            "INSERT INTO job_applications (user_id, job_title, company, job_link) VALUES (?, ?, ?, ?)",
+            [req.user.id, job_title, company, job_link || null]
+        );
+        res.json({ message: "Job application saved!" });
     } catch (error) {
-        console.error("❌ Puppeteer Error:", error.message);
-    } finally {
-        await browser.close();
+        console.error("Error saving job application:", error);
+        res.status(500).json({ message: "Server error" });
     }
+});
 
-    if (jobResults.length === 0) {
-        return res.status(404).json({ message: "No jobs found!" });
+// Get user's applied jobs
+router.get("/applied", verifyToken, async (req, res) => {
+    try {
+        const [jobs] = await pool.query(
+            "SELECT job_title, company, job_link, applied_date FROM job_applications WHERE user_id = ? ORDER BY applied_date DESC",
+            [req.user.id]
+        );
+        res.json(jobs);
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
     }
-
-    res.json(jobResults);
 });
 
 module.exports = router;

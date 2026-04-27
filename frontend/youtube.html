@@ -6,48 +6,62 @@
     <meta name="description" content="Discover the best YouTube tutorials for your career and skills on Career Counseling Platform.">
     <title>YouTube Recommendations - Career Counseling</title>
     <link rel="preconnect" href="https://career-counseling-backend.onrender.com">
-    <link rel="preconnect" href="https://www.youtube.com">
+    <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/youtube.css">
 </head>
 <body>
     <header>
-        <h1>Best YouTube Videos for Your Career &amp; Skills</h1>
+        <h1>Career Counseling</h1>
         <nav>
             <ul>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a id="mentorshipLink" href="mentorship-student.html">Mentorship</a></li>
                 <li><a href="jobs.html">Jobs</a></li>
-                <li><a href="#" onclick="logout()">Logout</a></li>
+                <li><a href="quiz.html">Quizzes</a></li>
+                <li><a href="youtube.html">Videos</a></li>
+                <li><a href="chat.html">Chat</a></li>
+                <li><a href="#" onclick="logout(); return false;">Logout</a></li>
             </ul>
         </nav>
+        <button id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
-    <section class="search-section">
-        <h2>Find the Best Videos</h2>
-        <label for="career-field">Select Career Field:</label>
-        <select id="career-field">
-            <option value="software development">Software Development</option>
-            <option value="data science">Data Science</option>
-            <option value="marketing">Marketing</option>
-            <option value="design">Design</option>
-        </select>
+    <div class="page-wrapper">
+        <h1 class="section-title">Career Video Library</h1>
+        <p class="section-sub">Find the best tutorials for your chosen career path.</p>
 
-        <label for="skill">Select Skill:</label>
-        <input type="text" id="skill" placeholder="Enter a skill (e.g., Python, SEO)" aria-label="Skill">
-        <button onclick="fetchVideos()">Search Videos</button>
-    </section>
+        <section class="search-section">
+            <h2>Search Videos</h2>
+            <div class="form-group">
+                <label for="career-field">Career Field</label>
+                <select id="career-field">
+                    <option value="software development">Software Development</option>
+                    <option value="data science">Data Science</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="design">Design</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="skill">Specific Skill</label>
+                <input type="text" id="skill" placeholder="e.g. Python, SEO, Figma" aria-label="Skill">
+            </div>
+            <button class="btn" onclick="fetchVideos()">Search Videos</button>
+        </section>
 
-    <section id="video-list" class="video-list">
-        <h2>Recommended Videos</h2>
-        <div id="videos" aria-live="polite"></div>
-    </section>
+        <section id="video-list">
+            <h2>Recommended Videos</h2>
+            <div id="videos" aria-live="polite"></div>
+        </section>
+    </div>
 
     <footer>
         <p>&copy; 2025 Career Counseling. All rights reserved.</p>
     </footer>
 
     <script src="js/logout.js"></script>
-    <script src="js/nav.js"></script>
+    <script src="js/nav.js" defer></script>
     <script src="js/youtube.js" defer></script>
 </body>
 </html>

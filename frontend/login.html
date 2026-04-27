@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Log in to the Career Counseling Platform to access mentorship, jobs, and quizzes.">
     <title>Login - Career Counseling</title>
+    <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/login_reg.css">
 </head>
 <body>
@@ -14,34 +15,39 @@
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
-                <li><a href="mentorship-student.html">Mentorship</a></li>
-                <li><a href="service.html">Services</a></li>
-                <li><a href="jobs.html">Jobs</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
             </ul>
         </nav>
+        <button id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
-    <section class="form-container">
+    <div class="form-container">
         <div id="login-form" class="form-box">
-            <h2>Login</h2>
+            <h2>Welcome Back</h2>
             <form id="loginForm">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required autocomplete="email">
-
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required autocomplete="current-password">
-
-                <button type="submit">Login</button>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required autocomplete="email" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-block">Login</button>
             </form>
             <p>Don't have an account? <a href="register.html">Register here</a></p>
         </div>
-        <div id="loading" style="display:none;" aria-live="polite">Loading...</div>
-    </section>
+        <div id="loading" aria-live="polite">Loading...</div>
+    </div>
 
     <footer>
         <p>&copy; 2025 Career Counseling. All rights reserved.</p>
     </footer>
 
+    <script src="js/nav.js" defer></script>
     <script src="js/login.js"></script>
 </body>
 </html>

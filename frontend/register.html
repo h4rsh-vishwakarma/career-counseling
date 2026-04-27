@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Create a free account on Career Counseling Platform to connect with mentors and explore career opportunities.">
     <title>Register - Career Counseling</title>
+    <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/login_reg.css">
 </head>
 <body>
@@ -14,55 +15,66 @@
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
-                <li><a href="mentorship-student.html">Mentorship</a></li>
-                <li><a href="service.html">Services</a></li>
-                <li><a href="jobs.html">Jobs</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
             </ul>
         </nav>
+        <button id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
-    <section class="form-container">
+    <div class="form-container">
         <div id="register-form" class="form-box">
-            <h2>Register</h2>
+            <h2>Create Account</h2>
             <form id="registerForm">
-                <label for="name">Full Name:</label>
-                <input type="text" id="name" name="name" required autocomplete="name">
-
-                <label for="regEmail">Email:</label>
-                <input type="email" id="regEmail" name="email" required autocomplete="email" placeholder="Email">
-
-                <label for="regPassword">Password:</label>
-                <input type="password" id="regPassword" name="password" required autocomplete="new-password" placeholder="Password">
-
-                <label for="confirmPassword">Confirm Password:</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required autocomplete="new-password" placeholder="Confirm Password">
-
-                <label for="role">Role:</label>
-                <select id="role" name="role" required>
-                    <option value="student">Student</option>
-                    <option value="mentor">Mentor</option>
-                </select>
-
-                <label for="skills">Skills:</label>
-                <textarea id="skills" name="skills" rows="2" required></textarea>
-
-                <label for="education">Education:</label>
-                <textarea id="education" name="education" rows="2" required></textarea>
-
-                <label for="resume">Upload Resume:</label>
-                <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx">
-
-                <button type="submit">Register</button>
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required autocomplete="name" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input type="email" id="regEmail" name="email" required autocomplete="email" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" name="password" required autocomplete="new-password" placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required autocomplete="new-password" placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select id="role" name="role" required>
+                        <option value="student">Student</option>
+                        <option value="mentor">Mentor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="skills">Skills</label>
+                    <textarea id="skills" name="skills" rows="2" placeholder="e.g. Python, Design, Marketing"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="education">Education</label>
+                    <textarea id="education" name="education" rows="2" placeholder="e.g. B.Tech Computer Science"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="resume">Resume (PDF, DOC)</label>
+                    <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx">
+                </div>
+                <button type="submit" class="btn btn-block">Create Account</button>
             </form>
             <p>Already have an account? <a href="login.html">Login here</a></p>
         </div>
-        <div id="loading" style="display:none;" aria-live="polite">Loading...</div>
-    </section>
+        <div id="loading" aria-live="polite">Loading...</div>
+    </div>
 
     <footer>
         <p>&copy; 2025 Career Counseling. All rights reserved.</p>
     </footer>
 
+    <script src="js/nav.js" defer></script>
     <script src="js/register.js"></script>
 </body>
 </html>

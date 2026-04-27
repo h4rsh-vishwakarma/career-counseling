@@ -1,4 +1,5 @@
 -- Career Counseling Platform — Database Schema
+-- Run this once on a fresh Railway MySQL instance
 
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -25,11 +26,24 @@ CREATE TABLE IF NOT EXISTS mentorship_sessions (
     FOREIGN KEY (mentor_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- Used by mentorship.js routes for request/accept/reject flow
+CREATE TABLE IF NOT EXISTS mentorship_requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    session_id INT,
+    student_id INT NOT NULL,
+    mentor_id INT NOT NULL,
+    status ENUM('pending', 'accepted', 'rejected') NOT NULL DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (session_id) REFERENCES mentorship_sessions(id) ON DELETE SET NULL,
+    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (mentor_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Used by user.js progress tracking (mentorship participation count)
 CREATE TABLE IF NOT EXISTS mentorship_participants (
     id INT AUTO_INCREMENT PRIMARY KEY,
     session_id INT NOT NULL,
     student_id INT NOT NULL,
-    status ENUM('pending', 'accepted', 'rejected') NOT NULL DEFAULT 'pending',
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (session_id) REFERENCES mentorship_sessions(id) ON DELETE CASCADE,
     FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE
@@ -45,14 +59,15 @@ CREATE TABLE IF NOT EXISTS quizzes (
 CREATE TABLE IF NOT EXISTS quiz_submissions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    quiz_id INT NOT NULL,
-    answers JSON,
+    quiz_id INT,
+    quiz_category VARCHAR(100),
     score INT DEFAULT 0,
+    total INT DEFAULT 0,
     submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+-- Used by chatControllers.js
 CREATE TABLE IF NOT EXISTS messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
     sender_id INT NOT NULL,
@@ -68,6 +83,7 @@ CREATE TABLE IF NOT EXISTS job_applications (
     user_id INT NOT NULL,
     job_title VARCHAR(255),
     company VARCHAR(255),
+    job_link VARCHAR(500),
     applied_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

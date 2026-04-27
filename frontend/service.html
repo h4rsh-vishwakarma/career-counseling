@@ -9,43 +9,56 @@
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary">
     <title>Our Services - Career Counseling</title>
+    <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/service.css">
 </head>
 <body>
     <header>
-        <h1>Our Services</h1>
+        <h1>Career Counseling</h1>
         <nav>
             <ul>
-                <li><a href="dashboard.html">Home</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
-                <li><a id="mentorshipLink" href="mentorship-student.html">Mentorship</a></li>
+                <li><a href="service.html">Services</a></li>
                 <li><a href="jobs.html">Jobs</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <li><a href="#" onclick="logout()">Logout</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
             </ul>
         </nav>
+        <button id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </header>
 
-    <section class="services">
-        <div class="service">
-            <h3>Career Assessments</h3>
-            <p>Personalized tests to help you identify your strengths and career paths.</p>
-        </div>
-        <div class="service">
-            <h3>Resume Building</h3>
-            <p>Get expert guidance to create a professional resume.</p>
-        </div>
-        <div class="service">
-            <h3>Interview Preparation</h3>
-            <p>Mock interviews and coaching to help you ace your next job interview.</p>
-        </div>
-    </section>
+    <div class="page-wrapper">
+        <h1 class="section-title">Our Services</h1>
+        <p class="section-sub">Everything you need to launch a successful career.</p>
+
+        <section class="services">
+            <div class="service">
+                <h3>Career Assessments</h3>
+                <p>Personalized tests to help you identify your strengths and ideal career paths based on your skills and interests.</p>
+            </div>
+            <div class="service">
+                <h3>Resume Building</h3>
+                <p>Get expert guidance to create a professional resume that stands out to recruiters in your target industry.</p>
+            </div>
+            <div class="service">
+                <h3>Interview Preparation</h3>
+                <p>Mock interviews and coaching sessions to help you confidently ace your next job interview.</p>
+            </div>
+            <div class="service">
+                <h3>Mentorship Sessions</h3>
+                <p>One-on-one sessions with industry professionals who can guide you through your career journey.</p>
+            </div>
+        </section>
+    </div>
 
     <footer>
         <p>&copy; 2025 Career Counseling. All rights reserved.</p>
     </footer>
 
-    <script src="js/logout.js"></script>
-    <script src="js/nav.js"></script>
+    <script src="js/nav.js" defer></script>
 </body>
 </html>
