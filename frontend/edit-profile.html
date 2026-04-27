@@ -1,51 +1,65 @@
-<!-- edit-profile.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile</title>
+    <meta name="description" content="Edit your profile details on Career Counseling Platform.">
+    <title>Edit Profile - Career Counseling</title>
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
     <header>
         <h1>Edit Profile</h1>
-        <a href="dashboard.html">Back to Dashboard</a>
+        <nav>
+            <ul>
+                <li><a href="dashboard.html">Back to Dashboard</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
     </header>
 
     <section class="update-profile">
         <h3>Update Your Profile</h3>
-        <input type="text" id="name" placeholder="Enter your name">
-        <input type="email" id="email" placeholder="Enter your email">
-        <input type="text" id="skills" placeholder="Enter your skills">
-        <input type="text" id="education" placeholder="Enter your education">
-        
-        <button onclick="saveProfile()">Save</button>
-        
-      
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" placeholder="Enter your name" aria-label="Full name">
 
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter your email" aria-label="Email">
+
+        <label for="skills">Skills:</label>
+        <input type="text" id="skills" placeholder="Enter your skills" aria-label="Skills">
+
+        <label for="education">Education:</label>
+        <input type="text" id="education" placeholder="Enter your education" aria-label="Education">
+
+        <button onclick="saveProfile()">Save</button>
     </section>
 
+    <footer>
+        <p>&copy; 2025 Career Counseling. All rights reserved.</p>
+    </footer>
+
+    <script src="js/logout.js"></script>
     <script>
+        const API_BASE = "https://career-counseling-backend.onrender.com";
+
         document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("token");
+            if (!token) { window.location.href = "login.html"; return; }
             try {
-                const token = localStorage.getItem("token");
-                const response = await fetch("http://localhost:5000/api/profile", {
-                    headers: { "Authorization": `Bearer ${token}` }
+                const response = await fetch(`${API_BASE}/api/user/profile`, {
+                    headers: { Authorization: `Bearer ${token}` }
                 });
-        
                 if (!response.ok) throw new Error("Failed to fetch user profile");
-        
                 const user = await response.json();
-                document.getElementById("edit-name").value = user.name || "";
-                document.getElementById("edit-email").value = user.email || "";
-                document.getElementById("edit-skills").value = user.skills || "";
-                document.getElementById("edit-education").value = user.education || "";
+                document.getElementById("name").value = user.name || "";
+                document.getElementById("email").value = user.email || "";
+                document.getElementById("skills").value = user.skills || "";
+                document.getElementById("education").value = user.education || "";
             } catch (error) {
                 console.error("Error loading profile:", error);
             }
         });
-        
 
         async function saveProfile() {
             const profileData = {
@@ -54,36 +68,26 @@
                 skills: document.getElementById("skills").value,
                 education: document.getElementById("education").value,
             };
-        
-            console.log("📩 Sending Data:", profileData); // Debugging
-        
             try {
-                const response = await fetch("http://localhost:5000/api/user/profile", {
+                const response = await fetch(`${API_BASE}/api/user/profile`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Bearer " + localStorage.getItem("token")  // Include token
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
-                    body: JSON.stringify(profileData)
+                    body: JSON.stringify(profileData),
                 });
-        
-                console.log("📩 Server Response Status:", response.status);
-                
                 if (!response.ok) {
                     const errorData = await response.json();
                     throw new Error(errorData.message || "Error updating profile.");
                 }
-        
-                const data = await response.json();
-                console.log("✅ Profile Update Success:", data);
                 alert("Profile updated successfully!");
-        
+                window.location.href = "dashboard.html";
             } catch (error) {
-                console.error("❌ Error updating profile:", error);
+                console.error("Error updating profile:", error);
                 alert("Error updating profile: " + error.message);
             }
         }
-        
     </script>
 </body>
 </html>

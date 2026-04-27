@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const router = express.Router();
 
-const API_KEY = process.env.RAPIDAPI_KEY || "4691604278msh6b31a5e1dbefa71p1c29ddjsna64c73950e33";
+const API_KEY = process.env.JSEARCH_API_KEY;
 const BASE_URL = "https://jsearch.p.rapidapi.com/search";
 
 // ✅ Debugging Log

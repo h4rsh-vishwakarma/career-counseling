@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Mentorship</title>
+    <meta name="description" content="Browse and join mentorship sessions from expert mentors on Career Counseling Platform.">
+    <title>Student Mentorship - Career Counseling</title>
     <link rel="stylesheet" href="css/mentorship.css">
 </head>
 <body>
@@ -13,19 +14,23 @@
             <ul>
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a href="mentorship-student.html">Mentorship</a></li>
-                <li><a href="logout.html" onclick="logout()">Logout</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
             </ul>
         </nav>
     </header>
 
     <section class="available-sessions">
         <h2>Available Mentorship Sessions</h2>
-        <div id="sessions-container">
+        <div id="sessions-container" aria-live="polite">
             <p>Loading available sessions...</p>
         </div>
     </section>
 
-    <script src="js/mentorship-student.js"></script>
+    <footer>
+        <p>&copy; 2025 Career Counseling. All rights reserved.</p>
+    </footer>
+
     <script src="js/logout.js"></script>
+    <script src="js/mentorship-student.js" defer></script>
 </body>
 </html>

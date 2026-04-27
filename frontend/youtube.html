@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Recommendations</title>
+    <meta name="description" content="Discover the best YouTube tutorials for your career and skills on Career Counseling Platform.">
+    <title>YouTube Recommendations - Career Counseling</title>
+    <link rel="preconnect" href="https://career-counseling-backend.onrender.com">
+    <link rel="preconnect" href="https://www.youtube.com">
     <link rel="stylesheet" href="css/youtube.css">
 </head>
 <body>
     <header>
-        <h1>Best YouTube Videos for Your Career & Skills</h1>
+        <h1>Best YouTube Videos for Your Career &amp; Skills</h1>
         <nav>
             <ul>
                 <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a id="mentorshipLink" href="#">Mentorship</a></li>
+                <li><a id="mentorshipLink" href="mentorship-student.html">Mentorship</a></li>
                 <li><a href="jobs.html">Jobs</a></li>
                 <li><a href="#" onclick="logout()">Logout</a></li>
-
             </ul>
         </nav>
     </header>
@@ -31,40 +33,21 @@
         </select>
 
         <label for="skill">Select Skill:</label>
-        <input type="text" id="skill" placeholder="Enter a skill (e.g., Python, SEO)">
+        <input type="text" id="skill" placeholder="Enter a skill (e.g., Python, SEO)" aria-label="Skill">
         <button onclick="fetchVideos()">Search Videos</button>
     </section>
 
     <section id="video-list" class="video-list">
         <h2>Recommended Videos</h2>
-        <p id="loading" class="loading">🔄 Loading videos, please wait...</p>
-
-        <div id="videos"></div>
+        <div id="videos" aria-live="polite"></div>
     </section>
-    <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-            const token = localStorage.getItem("token");
-            const response = await fetch("http://localhost:5000/api/user/profile", {
-                headers: { "Authorization": `Bearer ${token}` },
-            });
-            const user = await response.json();
 
-            document.getElementById("user-name-display").textContent = user.name;
-            document.getElementById("user-role").textContent = user.role;
-            document.getElementById("user-education").textContent = user.education || "Not Provided";
-            document.getElementById("user-skills").textContent = user.skills || "Not Provided";
-            document.getElementById("user-resume").href = user.resume || "#";
-            
-            // Redirect Mentorship link and button based on user role
-            const mentorshipLink = document.getElementById("mentorshipLink");
-            const mentorshipButton = document.getElementById("mentorshipButton");
-            const mentorshipPage = user.role === "mentor" ? "mentorship-mentor.html" : "mentorship-student.html";
-            mentorshipLink.href = mentorshipPage;
-            mentorshipButton.onclick = () => window.location.href = mentorshipPage;
-        });
-    </script>
-    <script src="js/youtube.js"></script>
+    <footer>
+        <p>&copy; 2025 Career Counseling. All rights reserved.</p>
+    </footer>
+
     <script src="js/logout.js"></script>
-
+    <script src="js/nav.js"></script>
+    <script src="js/youtube.js" defer></script>
 </body>
 </html>

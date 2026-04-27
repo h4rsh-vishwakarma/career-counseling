@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard.html
+Disallow: /edit-profile.html
+Disallow: /chat.html
+
+Sitemap: https://h4rsh-vishwakarma.github.io/career-counseling/sitemap.xml

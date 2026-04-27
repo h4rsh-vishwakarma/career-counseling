@@ -3,39 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create a free account on Career Counseling Platform to connect with mentors and explore career opportunities.">
     <title>Register - Career Counseling</title>
     <link rel="stylesheet" href="css/login_reg.css">
-    
 </head>
 <body>
     <header>
         <h1>Career Counseling</h1>
         <nav>
             <ul>
-                <li><a href="dashboard.html">Home</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="about.html">About</a></li>
-                <li><a href="mentorship.html">Mentorship</a></li>
+                <li><a href="mentorship-student.html">Mentorship</a></li>
                 <li><a href="service.html">Services</a></li>
                 <li><a href="jobs.html">Jobs</a></li>
             </ul>
         </nav>
     </header>
-    
+
     <section class="form-container">
         <div id="register-form" class="form-box">
             <h2>Register</h2>
             <form id="registerForm">
                 <label for="name">Full Name:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" required autocomplete="name">
 
-                <label for="email">Email:</label>
-                <input type="email" id="regEmail" name="email" required title="Enter your email" placeholder="Email">
+                <label for="regEmail">Email:</label>
+                <input type="email" id="regEmail" name="email" required autocomplete="email" placeholder="Email">
 
-                <label for="password">Password:</label>
-                <input type="password" id="regPassword" name="password" required title="Enter your password" placeholder="Password">
+                <label for="regPassword">Password:</label>
+                <input type="password" id="regPassword" name="password" required autocomplete="new-password" placeholder="Password">
 
-                <label for="confirm-password">Confirm Password:</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required title="Confirm your password" placeholder="Confirm Password">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required autocomplete="new-password" placeholder="Confirm Password">
 
                 <label for="role">Role:</label>
                 <select id="role" name="role" required>
@@ -50,19 +50,19 @@
                 <textarea id="education" name="education" rows="2" required></textarea>
 
                 <label for="resume">Upload Resume:</label>
-                <input type="file" id="resume" name="resume" required>
+                <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx">
 
                 <button type="submit">Register</button>
             </form>
             <p>Already have an account? <a href="login.html">Login here</a></p>
         </div>
-        <div id="loading" style="display:none;">Loading...</div>
+        <div id="loading" style="display:none;" aria-live="polite">Loading...</div>
     </section>
-    
-    <script src="js/register.js"></script>
 
     <footer>
         <p>&copy; 2025 Career Counseling. All rights reserved.</p>
     </footer>
+
+    <script src="js/register.js"></script>
 </body>
 </html>
