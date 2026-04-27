@@ -16,21 +16,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js 20
+      - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
           cache-dependency-path: backend/package.json
 
       - name: Install dependencies
         run: npm install
 
-      - name: Check for .env file (should not exist)
+      - name: Check for .env file (should not be committed)
         run: |
           if [ -f .env ]; then
-            echo ".env file must not be committed"; exit 1
+            echo "ERROR: backend/.env must not be committed to the repository"
+            exit 1
           fi
+          echo ".env check passed"
 
       - name: Run tests
         run: npm test
