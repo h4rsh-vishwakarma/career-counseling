@@ -1,5 +1,11 @@
 // Role-based mentorship link + hamburger toggle
 document.addEventListener("DOMContentLoaded", () => {
+    const navList = document.querySelector("nav ul");
+    if (navList && !document.getElementById("careerBotLink")) {
+        const item = document.createElement("li");
+        item.innerHTML = '<a id="careerBotLink" href="chatbot.html">Career AI</a>';
+        navList.appendChild(item);
+    }
     const role = localStorage.getItem("userRole");
     const mentorshipLink = document.getElementById("mentorshipLink");
     if (mentorshipLink) {

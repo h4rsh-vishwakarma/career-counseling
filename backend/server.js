@@ -74,6 +74,7 @@ const jobApplyRoutes = require("./routes/jobs");
 const quizRoutes = require("./routes/quiz");
 const chatRoutes = require("./routes/chatRoutes");
 const youtubeRoutes = require("./routes/youtube");
+const chatbotRoutes = require("./routes/chatbot");
 
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/user", userRoutes);
@@ -83,6 +84,7 @@ app.use("/api/jobs", jobApplyRoutes);
 app.use("/api/quiz", quizRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/youtube", youtubeRoutes);
+app.use("/api/chatbot", rateLimit({ windowMs: 15 * 60 * 1000, max: 30, message: { message: "Too many chatbot requests. Try again later." } }), chatbotRoutes);
 
 // Health check
 app.get("/health", (req, res) => res.json({ status: "ok" }));
