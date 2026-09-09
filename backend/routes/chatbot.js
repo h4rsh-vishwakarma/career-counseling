@@ -37,7 +37,7 @@ router.post("/chat", async (req, res) => {
                 Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
             },
             body: JSON.stringify({
-                model: process.env.OPENAI_MODEL || "gpt-5.2",
+                model: process.env.OPENAI_MODEL || "gpt-5-mini",
                 instructions: careerInstructions,
                 input: messages,
                 max_output_tokens: 700,
