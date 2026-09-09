@@ -1,7 +1,33 @@
 const botForm = document.getElementById("chatbotForm");
 const botInput = document.getElementById("botInput");
 const botMessages = document.getElementById("botMessages");
-const botHistory = [];
+const memoryKey = "careerGuideMemory";
+const historyKey = "careerGuideHistory";
+const memory = JSON.parse(localStorage.getItem(memoryKey) || "{}");
+const botHistory = JSON.parse(localStorage.getItem(historyKey) || "[]");
+
+function learnFromMessage(content) {
+    const value = content.trim();
+    const rules = [
+        [/(?:i am|i'm|my education is|मैं)\s+(.+)/i, "education"],
+        [/(?:interested in|interest is|मुझे .* में रुचि|रुचि)\s+(.+)/i, "interest"],
+        [/(?:my goal is|want to become|i want to|मेरा लक्ष्य|मैं .* बनना)/i, "goal"],
+    ];
+    for (const [pattern, field] of rules) {
+        const match = value.match(pattern);
+        if (match?.[1] && match[1].length < 180) memory[field] = match[1].trim();
+    }
+    if (/remember|save this|याद रख|सेव कर/i.test(value)) {
+        memory.notes = [...new Set([...(memory.notes || []), value])].slice(-10);
+    }
+    localStorage.setItem(memoryKey, JSON.stringify(memory));
+}
+
+function saveHistory() {
+    localStorage.setItem(historyKey, JSON.stringify(botHistory.slice(-20)));
+}
+
+botHistory.forEach((item) => addBotMessage(item.content, item.role));
 
 function addBotMessage(text, role) {
     const message = document.createElement("div");
@@ -18,6 +44,8 @@ botForm.addEventListener("submit", async (event) => {
     if (!content) return;
 
     botHistory.push({ role: "user", content });
+    learnFromMessage(content);
+    saveHistory();
     addBotMessage(content, "user");
     botInput.value = "";
     botInput.disabled = true;
@@ -33,6 +61,7 @@ botForm.addEventListener("submit", async (event) => {
         if (!response.ok) throw new Error(data.message || "Chatbot request failed.");
         pending.remove();
         botHistory.push({ role: "assistant", content: data.answer });
+        saveHistory();
         addBotMessage(data.answer, "assistant");
     } catch (error) {
         pending.textContent = error.message || "Unable to connect to CareerGuide.";

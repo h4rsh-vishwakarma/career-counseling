@@ -28,24 +28,34 @@ function detectLanguage(message) {
     return /\b(mai|mujhe|mera|meri|kya|kaise|karo|karu|chahiye|hai|haan|batao|seekhna|jana)\b/i.test(message) ? "hi" : "en";
 }
 
-function getGuide(message) {
+function getGuide(message, memory = {}) {
     const language = detectLanguage(message);
     const text = message.toLowerCase();
     const guide = guides[language];
-    if (/resume|cv|biodata/.test(text)) return guide.resume;
-    if (/interview|hr round|technical round/.test(text)) return guide.interview;
-    if (/roadmap|plan|kaise start|start kar/.test(text)) return guide.roadmap;
-    if (/skill|learn|seekh|course|स्किल|सीख/.test(text)) return guide.skills;
-    if (/job|career|profession|field|stream|degree|करियर|नौकरी/.test(text)) return guide.career;
-    if (/apply|application|linkedin|internship|placement|आवेदन/.test(text)) return guide.job;
-    return guide.fallback;
+    if (/what do you know|remember|याद|मेरे बारे में/.test(text)) {
+        const facts = [memory.education, memory.interest, memory.goal].filter(Boolean);
+        return facts.length
+            ? (language === "hi" ? `मुझे आपके बारे में यह याद है: ${facts.join("; ")}` : `I remember this about you: ${facts.join("; ")}`)
+            : (language === "hi" ? "अभी आपने अपने बारे में कोई detail save नहीं की है। अपनी education, interest या goal बताइए।" : "I have not saved any details about you yet. Tell me your education, interests or goal.");
+    }
+    const context = [memory.education, memory.interest, memory.goal].filter(Boolean).join("; ");
+    const personalize = context
+        ? (language === "hi" ? `\n\nAapke saved context (${context}) ke basis par, is advice ko apni situation ke according apply kijiye.` : `\n\nBased on your saved context (${context}), apply this advice to your situation.`)
+        : "";
+    if (/resume|cv|biodata/.test(text)) return guide.resume + personalize;
+    if (/interview|hr round|technical round/.test(text)) return guide.interview + personalize;
+    if (/roadmap|plan|kaise start|start kar/.test(text)) return guide.roadmap + personalize;
+    if (/skill|learn|seekh|course|स्किल|सीख/.test(text)) return guide.skills + personalize;
+    if (/job|career|profession|field|stream|degree|करियर|नौकरी/.test(text)) return guide.career + personalize;
+    if (/apply|application|linkedin|internship|placement|आवेदन/.test(text)) return guide.job + personalize;
+    return guide.fallback + personalize;
 }
 
 router.post("/chat", (req, res) => {
     const messages = Array.isArray(req.body?.messages) ? req.body.messages : [];
     const lastUserMessage = [...messages].reverse().find((item) => item?.role === "user" && typeof item.content === "string");
     if (!lastUserMessage?.content?.trim()) return res.status(400).json({ message: "At least one user message is required." });
-    res.json({ answer: getGuide(lastUserMessage.content.trim()) });
+    res.json({ answer: getGuide(lastUserMessage.content.trim(), req.body?.memory || {}) });
 });
 
 module.exports = router;
