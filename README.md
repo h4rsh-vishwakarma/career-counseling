@@ -27,9 +27,12 @@ A full-stack web application connecting students with mentors for career guidanc
 
 **Frontend** — React + Vite hosted on GitHub Pages  
 **Backend** — Node.js + Express.js hosted on Render  
-**Database** — PostgreSQL hosted on Supabase
+**Database** — PostgreSQL / Supabase  
+**API** — REST APIs with Express.js  
+**Authentication** — JWT Authentication + bcryptjs  
 **Real-time** — Socket.io  
-**Auth** — JWT (jsonwebtoken) + bcryptjs  
+**Testing** — Jest, Supertest, Unit Testing, Integration Testing  
+**Automation** — GitHub Actions, CI/CD  
 **File uploads** — Multer  
 
 **Key packages:** `express`, `pg`, `jsonwebtoken`, `bcryptjs`, `multer`, `socket.io`, `express-rate-limit`, `dotenv`, `axios`
@@ -164,6 +167,52 @@ cd ../frontend
 npm install
 npm run dev
 ```
+
+---
+
+## Testing
+
+The backend includes automated unit, contract, and integration tests using Jest and Supertest.
+
+Coverage includes:
+
+- User registration and login
+- JWT authentication and authorization
+- Student and mentor role access
+- User profile APIs
+- Mentorship workflows
+- Job application APIs
+- Quiz APIs
+- Input validation
+- Error handling
+- Unknown route handling
+
+Test cases are documented in `backend/TEST_CASES.md`.
+
+Run:
+
+```bash
+cd backend
+npm test
+```
+
+The current suite contains 37 passing tests, including real Express route-handler tests through `backend/app.js` with a deterministic PostgreSQL pool mock for CI.
+
+---
+
+## CI/CD
+
+GitHub Actions automatically validates every push and pull request to the `master` branch.
+
+The CI pipeline:
+
+1. Installs backend dependencies
+2. Verifies that environment secrets are not committed
+3. Runs the Jest/Supertest test suite
+4. Installs frontend dependencies
+5. Builds the React/Vite frontend
+
+This provides automated validation before code changes are merged or deployed.
 
 ---
 
