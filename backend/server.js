@@ -13,8 +13,14 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-const allowedOrigins = (process.env.CORS_ORIGINS || "https://h4rsh-vishwakarma.github.io,http://localhost:3000")
+const defaultOrigins = [
+    "https://h4rsh-vishwakarma.github.io",
+    "http://localhost:3000",
+    "http://127.0.0.1:5500",
+];
+const configuredOrigins = (process.env.CORS_ORIGINS || "")
     .split(",").map((origin) => origin.trim()).filter(Boolean);
+const allowedOrigins = [...new Set([...defaultOrigins, ...configuredOrigins])];
 
 // CORS
 app.use(cors({
