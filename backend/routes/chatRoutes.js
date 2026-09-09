@@ -8,6 +8,6 @@ const router = express.Router();
 router.post("/sendMessage", verifyToken, sendMessage);
 
 // ✅ Fetch Chat Messages
-router.get("/:senderId/:receiverId", verifyToken, getMessages);
+router.get("/:receiverId", verifyToken, getMessages);
 
 module.exports = router;

@@ -1,5 +1,3 @@
-const API_BASE = "https://career-counseling-backend.onrender.com";
-
 async function fetchJobs() {
     const qualification = document.getElementById("qualification").value;
     const stream = document.getElementById("stream").value;

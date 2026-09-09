@@ -41,7 +41,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     loadingElement.style.display = "block";
 
     try {
-        const response = await fetch("https://career-counseling-backend.onrender.com/api/auth/register", {
+        const response = await fetch(`${API_BASE}/api/auth/register`, {
             method: "POST",
             body: formData,
             // Do NOT set Content-Type header — browser sets it automatically with boundary for multipart

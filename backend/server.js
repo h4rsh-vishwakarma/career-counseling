@@ -5,17 +5,20 @@ const http = require("http");
 const socketIo = require("socket.io");
 const path = require("path");
 const rateLimit = require("express-rate-limit");
+const { checkDatabaseConnection, pool } = require("./src/config/database");
+const { canChat } = require("./controllers/chatControllers");
 
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
 
-const allowedOrigin = "https://h4rsh-vishwakarma.github.io";
+const allowedOrigins = (process.env.CORS_ORIGINS || "https://h4rsh-vishwakarma.github.io,http://localhost:3000")
+    .split(",").map((origin) => origin.trim()).filter(Boolean);
 
 // CORS
 app.use(cors({
-    origin: allowedOrigin,
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -29,7 +32,7 @@ app.use((req, res, next) => {
     res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
     res.setHeader(
         "Content-Security-Policy",
-        "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdn.socket.io; connect-src 'self' https://career-counseling-backend.onrender.com wss://career-counseling-backend.onrender.com https://opentdb.com; img-src 'self' data: https://career-counseling-backend.onrender.com; style-src 'self' 'unsafe-inline'; frame-src https://www.youtube.com;"
+        `default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdn.socket.io; connect-src 'self' ${allowedOrigins.join(' ')} https://opentdb.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; frame-src https://www.youtube.com;`
     );
     next();
 });
@@ -89,23 +92,41 @@ app.use((err, req, res, next) => {
 
 // Socket.io (restricted CORS)
 const io = socketIo(server, {
-    cors: { origin: allowedOrigin, methods: ["GET", "POST"] },
+    cors: { origin: allowedOrigins, methods: ["GET", "POST"] },
 });
 let onlineUsers = {};
 
+io.use((socket, next) => {
+    try {
+        const token = socket.handshake.auth?.token;
+        if (!token) return next(new Error("Authentication required"));
+        socket.user = require("jsonwebtoken").verify(token, process.env.JWT_SECRET);
+        next();
+    } catch (error) { next(new Error("Invalid authentication token")); }
+});
+
 io.on("connection", (socket) => {
-    socket.on("join", (userId) => {
+    socket.on("join", () => {
+        const userId = String(socket.user.id);
         onlineUsers[userId] = socket.id;
         io.emit("onlineUsers", Object.keys(onlineUsers));
     });
 
-    socket.on("sendMessage", async ({ senderId, receiverId, message }) => {
+    socket.on("sendMessage", async ({ receiverId, message }) => {
+        const senderId = socket.user.id;
+        if (!receiverId || typeof message !== "string" || !message.trim() || message.length > 2000) return;
+        if (!(await canChat(senderId, receiverId))) return;
+        await pool.query(
+            "INSERT INTO messages (sender_id, receiver_id, message) VALUES (?, ?, ?)",
+            [senderId, receiverId, message.trim()]
+        );
         if (onlineUsers[receiverId]) {
-            io.to(onlineUsers[receiverId]).emit("receiveMessage", { senderId, message });
+            io.to(onlineUsers[receiverId]).emit("receiveMessage", { senderId, message: message.trim() });
         }
     });
 
-    socket.on("typing", ({ senderId, receiverId }) => {
+    socket.on("typing", ({ receiverId }) => {
+        const senderId = socket.user.id;
         if (onlineUsers[receiverId]) {
             io.to(onlineUsers[receiverId]).emit("typing", senderId);
         }
@@ -120,4 +141,13 @@ io.on("connection", (socket) => {
 });
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+async function startServer() {
+    await checkDatabaseConnection();
+    server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+startServer().catch((error) => {
+    console.error("Unable to start server:", error.message);
+    process.exit(1);
+});

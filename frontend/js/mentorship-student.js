@@ -1,5 +1,3 @@
-const API_BASE = "https://career-counseling-backend.onrender.com";
-
 document.addEventListener("DOMContentLoaded", () => {
     if (!localStorage.getItem("token")) {
         window.location.href = "login.html";

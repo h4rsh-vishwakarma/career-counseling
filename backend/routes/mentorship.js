@@ -1,5 +1,5 @@
 const express = require("express");
-const { pool } = require("../models/db");
+const { pool } = require("../src/config/database");
 const verifyToken = require("../middleware/authMiddleware");
 
 const router = express.Router();
@@ -63,10 +63,23 @@ router.put("/requests/:requestId", verifyToken, async (req, res) => {
 
     try {
         // Update request status
-        await pool.query(
+        const [updateResult] = await pool.query(
             "UPDATE mentorship_requests SET status = ? WHERE id = ? AND mentor_id = ?",
             [status, requestId, req.user.id]
         );
+
+        if (updateResult.affectedRows === 0) {
+            return res.status(404).json({ message: "Request not found or not authorized." });
+        }
+
+        if (status === "accepted") {
+            await pool.query(
+                `INSERT INTO mentorship_participants (session_id, student_id)
+                 SELECT session_id, student_id FROM mentorship_requests WHERE id = ?
+                 ON CONFLICT (session_id, student_id) DO NOTHING`,
+                [requestId]
+            );
+        }
 
         res.json({ message: `Mentorship request ${status}!` });
     } catch (error) {
@@ -85,7 +98,7 @@ router.get("/my-requests", verifyToken, async (req, res) => {
 
     try {
         const [requests] = await pool.query(
-            `SELECT mr.id, u.name AS mentor_name, mr.status 
+            `SELECT mr.id, mr.session_id, mr.mentor_id, u.name AS mentor_name, mr.status
              FROM mentorship_requests mr 
              JOIN users u ON mr.mentor_id = u.id 
              WHERE mr.student_id = ?`,
@@ -175,7 +188,7 @@ router.delete("/sessions/:id", verifyToken, async (req, res) => {
 router.get("/available-sessions", verifyToken, async (req, res) => {
     try {
         const [sessions] = await pool.query(
-            "SELECT * FROM mentorship_sessions WHERE session_date >= CURDATE()"
+            "SELECT * FROM mentorship_sessions WHERE session_date >= CURRENT_DATE"
         );
 
         res.json(sessions);

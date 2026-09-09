@@ -1,5 +1,3 @@
-const API_BASE = "https://career-counseling-backend.onrender.com";
-
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -126,6 +124,19 @@ async function loadProgressChart() {
         if (mentorshipBar) mentorshipBar.style.width = `${data.mentorshipProgress}%`;
         const quizBar = document.getElementById("quiz-progress-fill");
         if (quizBar) quizBar.style.width = `${data.quizProgress}%`;
+        const quizProgressText = document.getElementById("quiz-progress");
+        if (quizProgressText) {
+            quizProgressText.textContent = data.quizAttempts
+                ? `${data.averageQuizScore}% average score (${data.quizAttempts} attempt${data.quizAttempts === 1 ? "" : "s"})`
+                : "No Quiz Taken";
+        }
+        [
+            ["mentorship-progress", data.mentorshipProgress],
+            ["quiz-progress-fill", data.quizProgress],
+        ].forEach(([id, value]) => {
+            const element = document.getElementById(id);
+            if (element?.parentElement) element.parentElement.setAttribute("aria-valuenow", String(value));
+        });
 
         const ctx = document.getElementById("progressChart");
         if (ctx) {

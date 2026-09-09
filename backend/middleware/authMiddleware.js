@@ -8,8 +8,10 @@ const verifyToken = (req, res, next) => {
     }
 
     try {
+        if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+            return res.status(500).json({ message: "Server authentication is not configured." });
+        }
         const verified = jwt.verify(token, process.env.JWT_SECRET);
-        console.log("Decoded Token:", verified); // Debugging
         req.user = verified;
         next();
     } catch (err) {
@@ -17,4 +19,12 @@ const verifyToken = (req, res, next) => {
     }
 };
 
+const requireRole = (...roles) => (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+        return res.status(403).json({ message: "You are not authorized for this action." });
+    }
+    next();
+};
+
 module.exports = verifyToken;
+module.exports.requireRole = requireRole;

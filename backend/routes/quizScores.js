@@ -1,7 +1,7 @@
 const express = require("express");
 const verifyToken = require("../middleware/authMiddleware");
 const router = express.Router();
-const { pool } = require("../models/db");
+const { pool } = require("../src/config/database");
 
 /**
  * ✅ Fetch User Quiz Scores (Final Fix)

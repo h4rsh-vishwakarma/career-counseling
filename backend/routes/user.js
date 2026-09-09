@@ -1,5 +1,5 @@
 const express = require("express");
-const { pool } = require("../models/db");
+const { pool } = require("../src/config/database");
 const verifyToken = require("../middleware/authMiddleware");
 const multer = require("multer");
 const path = require("path");
@@ -16,13 +16,21 @@ const profileStorage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, profilePicDir),
     filename: (req, file, cb) => cb(null, `profile_${req.user.id}${path.extname(file.originalname)}`),
 });
-const uploadProfilePic = multer({ storage: profileStorage });
+const uploadProfilePic = multer({
+    storage: profileStorage,
+    limits: { fileSize: 2 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => cb(null, ["image/jpeg", "image/png", "image/webp"].includes(file.mimetype)),
+});
 
 const resumeStorage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, resumeDir),
     filename: (req, file, cb) => cb(null, `resume_${req.user.id}${path.extname(file.originalname)}`),
 });
-const uploadResume = multer({ storage: resumeStorage });
+const uploadResume = multer({
+    storage: resumeStorage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => cb(null, ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].includes(file.mimetype)),
+});
 
 /**
  * ✅ Get User Profile
@@ -42,6 +50,21 @@ router.get("/profile", verifyToken, async (req, res) => {
     } catch (error) {
         console.error("❌ Error fetching profile:", error);
         res.status(500).json({ message: "Server error", error });
+    }
+});
+
+// Return only safe identity fields for an authenticated chat participant.
+router.get("/public/:userId", verifyToken, async (req, res) => {
+    try {
+        const [rows] = await pool.query(
+            "SELECT id, name, role FROM users WHERE id = ?",
+            [req.params.userId]
+        );
+        if (rows.length === 0) return res.status(404).json({ message: "User not found." });
+        res.json(rows[0]);
+    } catch (error) {
+        console.error("Error fetching public user:", error);
+        res.status(500).json({ message: "Server error" });
     }
 });
 
@@ -105,14 +128,27 @@ router.post("/uploadResume", verifyToken, uploadResume.single("resume"), async (
  */
 router.get("/progress", verifyToken, async (req, res) => {
     try {
-        const [quizCount] = await pool.query("SELECT COUNT(*) AS totalQuizzes FROM quiz_submissions WHERE user_id = ?", [req.user.id]);
-        const [mentorshipCount] = await pool.query("SELECT COUNT(*) AS totalMentorships FROM mentorship_participants WHERE student_id = ?", [req.user.id]);
-        const [jobCount] = await pool.query("SELECT COUNT(*) AS totalJobs FROM job_applications WHERE user_id = ?", [req.user.id]);
+        const [quizStats] = await pool.query(
+            `SELECT COUNT(*)::int AS attempts,
+                    COALESCE(ROUND(AVG(CASE WHEN total > 0 THEN score::numeric / total * 100 END)), 0)::int AS average_score
+             FROM quiz_submissions WHERE user_id = ?`, [req.user.id]
+        );
+        const [mentorshipCount] = await pool.query("SELECT COUNT(*)::int AS total FROM mentorship_participants WHERE student_id = ?", [req.user.id]);
+        const [jobCount] = await pool.query("SELECT COUNT(*)::int AS total FROM job_applications WHERE user_id = ?", [req.user.id]);
+
+        const quizAttempts = quizStats[0]?.attempts || 0;
+        const averageQuizScore = quizStats[0]?.average_score || 0;
+        const mentorships = mentorshipCount[0]?.total || 0;
+        const jobs = jobCount[0]?.total || 0;
 
         res.json({
-            mentorshipProgress: mentorshipCount[0].totalMentorships > 0 ? 80 : 20,
-            quizProgress: quizCount[0].totalQuizzes > 0 ? quizCount[0].totalQuizzes * 10 : 0,
-            jobProgress: jobCount[0].totalJobs > 0 ? jobCount[0].totalJobs * 10 : 0,
+            mentorshipProgress: mentorships > 0 ? 100 : 0,
+            quizProgress: averageQuizScore,
+            jobProgress: Math.min(100, jobs * 10),
+            quizAttempts,
+            averageQuizScore,
+            mentorships,
+            savedJobs: jobs,
         });
 
     } catch (error) {

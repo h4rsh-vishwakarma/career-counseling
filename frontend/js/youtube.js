@@ -1,5 +1,3 @@
-const API_BASE = "https://career-counseling-backend.onrender.com";
-
 async function fetchVideos() {
     const careerField = document.getElementById("career-field").value;
     const skill = document.getElementById("skill").value;

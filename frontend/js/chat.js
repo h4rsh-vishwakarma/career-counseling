@@ -1,20 +1,25 @@
-const API_BASE = "https://career-counseling-backend.onrender.com";
-
 // Initialise socket.io connection (loaded via CDN in chat.html)
-const socket = io(API_BASE);
+const socket = io(API_BASE, { auth: { token: localStorage.getItem("token") } });
 
 const userId = localStorage.getItem("userId");
 const chatBox = document.getElementById("chatContainer");
 const messageInput = document.getElementById("messageInput");
 const sendButton = document.getElementById("sendButton");
 const onlineStatus = document.getElementById("onlineStatus");
+const chatPartnerName = document.getElementById("chatPartnerName");
 
 // Recipient resolved at runtime — use query param or default
 const params = new URLSearchParams(window.location.search);
 const receiverId = params.get("userId") || "";
 
+if (!receiverId) {
+    if (chatPartnerName) chatPartnerName.textContent = "Select a mentorship contact";
+    if (messageInput) messageInput.disabled = true;
+    if (sendButton) sendButton.disabled = true;
+}
+
 // Join chat room
-socket.emit("join", userId);
+socket.emit("join");
 
 // Online status
 socket.on("onlineUsers", (users) => {
@@ -26,7 +31,7 @@ socket.on("onlineUsers", (users) => {
 
 // Typing indicator
 messageInput.addEventListener("input", () => {
-    socket.emit("typing", { senderId: userId, receiverId });
+    socket.emit("typing", { receiverId });
 });
 
 socket.on("typing", (typingUserId) => {
@@ -49,9 +54,22 @@ messageInput.addEventListener("keydown", (e) => {
 function sendMessage() {
     const message = messageInput.value.trim();
     if (!message) return;
-    socket.emit("sendMessage", { senderId: userId, receiverId, message });
+    socket.emit("sendMessage", { receiverId, message });
     appendMessage("You", message, "sent");
     messageInput.value = "";
+}
+
+async function loadChatPartner() {
+    if (!receiverId || !chatPartnerName) return;
+    try {
+        const response = await fetch(`${API_BASE}/api/user/public/${receiverId}`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+        });
+        if (response.ok) {
+            const user = await response.json();
+            chatPartnerName.textContent = user.name || `User ${receiverId}`;
+        }
+    } catch (error) { console.error("Failed to load chat participant:", error); }
 }
 
 // Receive message
@@ -75,13 +93,13 @@ function appendMessage(sender, message, type) {
 async function loadChatHistory() {
     if (!userId || !receiverId) return;
     try {
-        const response = await fetch(`${API_BASE}/api/chat/${userId}/${receiverId}`, {
+        const response = await fetch(`${API_BASE}/api/chat/${receiverId}`, {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
         });
         const messages = await response.json();
         messages.forEach(msg => {
-            const type = msg.senderId == userId ? "sent" : "received";
-            appendMessage(msg.senderId == userId ? "You" : `User ${msg.senderId}`, msg.message, type);
+            const type = msg.sender_id == userId ? "sent" : "received";
+            appendMessage(msg.sender_id == userId ? "You" : `User ${msg.sender_id}`, msg.message, type);
         });
     } catch (e) {
         console.error("Failed to load chat history:", e);
@@ -89,3 +107,4 @@ async function loadChatHistory() {
 }
 
 loadChatHistory();
+loadChatPartner();

@@ -50,11 +50,10 @@
         <p>&copy; 2025 Career Counseling. All rights reserved.</p>
     </footer>
 
+    <script src="js/config.js"></script>
     <script src="js/logout.js"></script>
     <script src="js/nav.js" defer></script>
     <script>
-        const API_BASE = "https://career-counseling-backend.onrender.com";
-
         document.addEventListener("DOMContentLoaded", async () => {
             const token = localStorage.getItem("token");
             if (!token) { window.location.href = "login.html"; return; }

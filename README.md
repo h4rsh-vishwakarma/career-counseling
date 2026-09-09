@@ -27,12 +27,12 @@ A full-stack web application connecting students with mentors for career guidanc
 
 **Frontend** — Static HTML/CSS/JS hosted on GitHub Pages  
 **Backend** — Node.js + Express.js hosted on Render  
-**Database** — MySQL hosted on Railway  
+**Database** — PostgreSQL hosted on Supabase
 **Real-time** — Socket.io  
 **Auth** — JWT (jsonwebtoken) + bcryptjs  
 **File uploads** — Multer  
 
-**Key packages:** `express`, `mysql2`, `jsonwebtoken`, `bcryptjs`, `multer`, `socket.io`, `express-rate-limit`, `dotenv`, `axios`
+**Key packages:** `express`, `pg`, `jsonwebtoken`, `bcryptjs`, `multer`, `socket.io`, `express-rate-limit`, `dotenv`, `axios`
 
 ---
 
@@ -65,7 +65,7 @@ career-counseling/
     │   ├── quiz.js         # POST /api/quiz/save-score, GET /my-scores
     │   ├── chatRoutes.js   # GET /api/chat/history
     │   └── youtube.js      # GET /api/youtube/search (YT proxy)
-    ├── models/db.js        # MySQL connection pool
+    ├── src/config/database.js # Supabase PostgreSQL pool + compatibility adapter
     ├── middleware/authMiddleware.js
     ├── schema.sql          # Full database schema
     └── server.js           # Entry point
@@ -129,12 +129,10 @@ career-counseling/
 Create `backend/.env` (never commit this file):
 
 ```env
-# Database (Railway MySQL)
-DB_HOST=your-railway-host
-DB_USER=your-db-user
-DB_PASS=your-db-password
-DB_NAME=your-db-name
-DB_PORT=3306
+# Database (Supabase PostgreSQL pooler URL)
+DATABASE_URL=postgresql://postgres.PROJECT_REF:YOUR_PASSWORD@aws-REGION.pooler.supabase.com:5432/postgres
+DB_CONNECTION_LIMIT=10
+CORS_ORIGINS=https://h4rsh-vishwakarma.github.io
 
 # Auth
 JWT_SECRET=your-long-random-secret
@@ -155,7 +153,7 @@ cd career-counseling
 
 # Backend
 cd backend
-npm install
+npm ci
 cp .env.example .env      # fill in your credentials
 npm run dev               # nodemon on port 5000
 
@@ -168,10 +166,10 @@ npm run dev               # nodemon on port 5000
 
 ## Database Setup
 
-Run `backend/schema.sql` once on your MySQL instance:
+Run `backend/schema.sql` once in the Supabase SQL Editor:
 
 ```bash
-mysql -h your-host -u your-user -p your-database < backend/schema.sql
+Paste the file contents into Supabase Dashboard → SQL Editor and run it.
 ```
 
 Creates tables: `users`, `mentorship_sessions`, `mentorship_requests`, `mentorship_participants`, `quizzes`, `quiz_submissions`, `messages`, `job_applications`
@@ -183,13 +181,13 @@ Creates tables: `users`, `mentorship_sessions`, `mentorship_requests`, `mentorsh
 **Backend (Render)**
 1. Connect your GitHub repo to Render
 2. Set root directory to `backend/`
-3. Build command: `npm install`
+3. Build command: `npm ci`
 4. Start command: `npm start`
 5. Add all `.env` variables as Render environment variables
 
 **Frontend (GitHub Pages)**
 1. Go to repo Settings → Pages
-2. Source: `master` branch, `/frontend` folder (or root if configured)
+2. Deploy only the `/frontend` folder. `docs/` contains documentation only and is not the app.
 3. The site deploys automatically on push
 
 **CORS** — `server.js` is locked to `https://h4rsh-vishwakarma.github.io`. Update `allowedOrigin` if your Pages URL differs.

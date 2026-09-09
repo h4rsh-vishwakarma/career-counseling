@@ -1,4 +1,4 @@
-const { pool } = require("../models/db");
+const { pool } = require("../src/config/database");
 
 /**
  * ✅ Function to Calculate Quiz Score

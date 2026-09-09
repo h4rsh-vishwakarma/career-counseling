@@ -1,12 +1,27 @@
-const { pool } = require("../models/db");
+const { pool } = require("../src/config/database");
+
+async function canChat(userId, otherUserId) {
+    const [rows] = await pool.query(
+        `SELECT 1 FROM mentorship_requests
+         WHERE status = 'accepted'
+           AND ((student_id = ? AND mentor_id = ?) OR (student_id = ? AND mentor_id = ?))
+         LIMIT 1`,
+        [userId, otherUserId, otherUserId, userId]
+    );
+    return rows.length > 0;
+}
 
 // ✅ Send Message Function
 const sendMessage = async (req, res) => {
     try {
-        const { senderId, receiverId, message } = req.body;
+        const { receiverId, message } = req.body;
+        const senderId = req.user.id;
 
         if (!senderId || !receiverId || !message) {
             return res.status(400).json({ message: "All fields are required!" });
+        }
+        if (!(await canChat(senderId, receiverId))) {
+            return res.status(403).json({ message: "Chat is available after mentorship acceptance." });
         }
 
         await pool.query(
@@ -24,7 +39,12 @@ const sendMessage = async (req, res) => {
 // ✅ Fetch Chat Messages
 const getMessages = async (req, res) => {
     try {
-        const { senderId, receiverId } = req.params;
+        const { receiverId } = req.params;
+        const senderId = req.user.id;
+
+        if (!(await canChat(senderId, receiverId))) {
+            return res.status(403).json({ message: "Chat is available after mentorship acceptance." });
+        }
 
         const [messages] = await pool.query(
             `SELECT * FROM messages 
@@ -41,4 +61,4 @@ const getMessages = async (req, res) => {
     }
 };
 
-module.exports = { sendMessage, getMessages };
+module.exports = { sendMessage, getMessages, canChat };
