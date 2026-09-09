@@ -1,0 +1,11 @@
+.chatbot-page { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+.chatbot-card { background: var(--card-bg, #fff); border-radius: 18px; padding: 1.5rem; box-shadow: 0 12px 35px rgba(0,0,0,.12); }
+.chatbot-intro { color: #667085; }
+.bot-messages { min-height: 360px; max-height: 55vh; overflow-y: auto; padding: 1rem; background: #f7f8fc; border-radius: 12px; }
+.bot-message { max-width: 82%; margin: .65rem 0; padding: .8rem 1rem; border-radius: 14px; white-space: pre-wrap; line-height: 1.5; }
+.bot-message.assistant { background: #e8eaff; color: #20234a; }
+.bot-message.user { margin-left: auto; background: #5b50e6; color: white; }
+.bot-message.pending { opacity: .65; }
+.bot-form { display: flex; gap: .75rem; margin-top: 1rem; align-items: end; }
+.bot-form textarea { flex: 1; resize: vertical; min-height: 48px; padding: .8rem; border: 1px solid #d0d5dd; border-radius: 10px; font: inherit; }
+@media (max-width: 600px) { .bot-form { flex-direction: column; align-items: stretch; } .bot-message { max-width: 95%; } }

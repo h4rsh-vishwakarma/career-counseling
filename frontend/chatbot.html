@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ask CareerGuide for practical career guidance.">
+    <title>Career AI - Career Counseling</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body>
+    <header>
+        <h1>Career Counseling</h1>
+        <nav><ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a id="careerBotLink" href="chatbot.html" aria-current="page">Career AI</a></li>
+        </ul></nav>
+        <button id="hamburger" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
+    </header>
+
+    <main class="chatbot-page">
+        <section class="chatbot-card" aria-labelledby="chatbot-title">
+            <h2 id="chatbot-title">CareerGuide AI</h2>
+            <p class="chatbot-intro">Ask about career choices, skills, roadmaps, resumes, interviews or jobs.</p>
+            <div id="botMessages" class="bot-messages" role="log" aria-live="polite">
+                <div class="bot-message assistant">Hi! I’m CareerGuide. Tell me your education, interests or career goal, and I’ll help you plan the next steps.</div>
+            </div>
+            <form id="chatbotForm" class="bot-form">
+                <label class="sr-only" for="botInput">Your career question</label>
+                <textarea id="botInput" rows="2" maxlength="4000" placeholder="Example: I am a BCA student interested in data science..." required></textarea>
+                <button class="btn" type="submit">Ask CareerGuide</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/nav.js" defer></script>
+    <script src="js/chatbot.js" defer></script>
+</body>
+</html>
