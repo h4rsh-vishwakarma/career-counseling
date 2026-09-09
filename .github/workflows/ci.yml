@@ -37,9 +37,8 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Validate frontend files
+      - name: Build React frontend
         working-directory: .
         run: |
-          test -f frontend/index.html
-          test -f frontend/js/config.js
-          ! grep -R 'const API_BASE = "http://localhost:5000"' frontend/js
+          npm ci --prefix frontend
+          npm run build --prefix frontend

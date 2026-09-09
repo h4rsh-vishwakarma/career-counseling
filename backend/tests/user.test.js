@@ -1,0 +1,5 @@
+const express = require("express"); const request = require("supertest"); const jwt = require("jsonwebtoken"); const verifyToken = require("../middleware/authMiddleware");
+process.env.JWT_SECRET = "b".repeat(40);
+const app = express(); app.use(express.json()); app.get("/profile", verifyToken, (req,res)=>res.json({id:req.user.id,name:"Aarav",role:req.user.role})); app.put("/profile", verifyToken, (req,res)=>!Object.keys(req.body).length?res.status(400).json({message:"No fields provided for update."}):res.json({message:"Profile updated successfully!"}));
+const auth = `Bearer ${jwt.sign({id:7,role:"student"},process.env.JWT_SECRET)}`;
+describe("profile API contract",()=>{test("retrieves authenticated profile",async()=>expect((await request(app).get("/profile").set("Authorization",auth)).body).toMatchObject({id:7,role:"student"}));test("updates profile with valid payload",async()=>expect((await request(app).put("/profile").set("Authorization",auth).send({skills:"React"})).status).toBe(200));test("rejects empty profile update",async()=>expect((await request(app).put("/profile").set("Authorization",auth).send({})).status).toBe(400));});

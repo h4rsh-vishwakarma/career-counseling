@@ -25,7 +25,7 @@ A full-stack web application connecting students with mentors for career guidanc
 
 ## Tech Stack
 
-**Frontend** — Static HTML/CSS/JS hosted on GitHub Pages  
+**Frontend** — React + Vite hosted on GitHub Pages  
 **Backend** — Node.js + Express.js hosted on Render  
 **Database** — PostgreSQL hosted on Supabase
 **Real-time** — Socket.io  
@@ -40,7 +40,9 @@ A full-stack web application connecting students with mentors for career guidanc
 
 ```
 career-counseling/
-├── frontend/               # Static site (GitHub Pages)
+├── frontend/               # React/Vite app (GitHub Pages)
+│   ├── src/                # React UI and responsive design system
+│   ├── package.json        # Vite build scripts
 │   ├── css/
 │   │   ├── global.css      # Design system (variables, components)
 │   │   └── *.css           # Page-specific overrides
@@ -158,8 +160,9 @@ cp .env.example .env      # fill in your credentials
 npm run dev               # nodemon on port 5000
 
 # Frontend
-# Open frontend/ with VS Code Live Server, or any static server
-# e.g. npx serve frontend
+cd ../frontend
+npm install
+npm run dev
 ```
 
 ---
@@ -187,7 +190,7 @@ Creates tables: `users`, `mentorship_sessions`, `mentorship_requests`, `mentorsh
 
 **Frontend (GitHub Pages)**
 1. Go to repo Settings → Pages
-2. Deploy only the `/frontend` folder. `docs/` contains documentation only and is not the app.
+2. The workflow builds the React/Vite app and deploys `/frontend/dist`. `docs/` contains documentation only.
 3. The site deploys automatically on push
 
 **CORS** — `server.js` is locked to `https://h4rsh-vishwakarma.github.io`. Update `allowedOrigin` if your Pages URL differs.

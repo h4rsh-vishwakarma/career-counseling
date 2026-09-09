@@ -1,0 +1,27 @@
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
+const rateLimit = require("express-rate-limit");
+
+const app = express();
+const allowedOrigins = [...new Set(["https://h4rsh-vishwakarma.github.io", "http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5500", ...(process.env.CORS_ORIGINS || "").split(",").map(v => v.trim()).filter(Boolean)])];
+app.use(cors({ origin: allowedOrigins, methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], allowedHeaders: ["Content-Type", "Authorization"], credentials: true }));
+app.use((req, res, next) => { res.setHeader("X-Content-Type-Options", "nosniff"); res.setHeader("X-Frame-Options", "DENY"); res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin"); next(); });
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, message: { message: "Too many requests, please try again later." } });
+app.use("/api/auth", authLimiter, require("./routes/auth"));
+app.use("/api/user", require("./routes/user"));
+app.use("/api/mentorship", require("./routes/mentorship"));
+app.use("/api", require("./routes/jobAPI"));
+app.use("/api/jobs", require("./routes/jobs"));
+app.use("/api/quiz", require("./routes/quiz"));
+app.use("/api/chat", require("./routes/chatRoutes"));
+app.use("/api/youtube", require("./routes/youtube"));
+app.use("/api/chatbot", require("./routes/chatbot"));
+app.get("/health", (req, res) => res.json({ status: "ok", database: "PostgreSQL / Supabase" }));
+app.get("/", (req, res) => res.send("Career Counseling Backend is Live!"));
+app.use((req, res) => res.status(404).json({ message: "Route not found" }));
+app.use((err, req, res, next) => { console.error(err.stack); res.status(500).json({ message: "Internal server error" }); });
+module.exports = app;

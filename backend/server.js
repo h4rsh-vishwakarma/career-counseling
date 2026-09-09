@@ -10,7 +10,7 @@ const { canChat } = require("./controllers/chatControllers");
 
 dotenv.config();
 
-const app = express();
+const app = require("./app");
 const server = http.createServer(app);
 
 const defaultOrigins = [
@@ -22,13 +22,13 @@ const configuredOrigins = (process.env.CORS_ORIGINS || "")
     .split(",").map((origin) => origin.trim()).filter(Boolean);
 const allowedOrigins = [...new Set([...defaultOrigins, ...configuredOrigins])];
 
-// CORS
-app.use(cors({
+/* Legacy setup retained below for socket/server compatibility. HTTP middleware is defined in app.js. */
+/* app.use(cors({
     origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
-}));
+})); */
 
 // Security headers (lightweight helmet replacement — no extra package needed)
 app.use((req, res, next) => {
@@ -53,8 +53,8 @@ const authLimiter = rateLimit({
 });
 
 // Body parsing
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+/* app.use(express.json());
+app.use(express.urlencoded({ extended: true })); */
 
 // Static uploads
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -65,7 +65,7 @@ app.get("/uploads/resume/:filename", (req, res) => {
     });
 });
 
-// Routes
+/* Routes are mounted by app.js. */
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const mentorshipRoutes = require("./routes/mentorship");
@@ -76,7 +76,7 @@ const chatRoutes = require("./routes/chatRoutes");
 const youtubeRoutes = require("./routes/youtube");
 const chatbotRoutes = require("./routes/chatbot");
 
-app.use("/api/auth", authLimiter, authRoutes);
+/* app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/mentorship", mentorshipRoutes);
 app.use("/api", jobRoutes);
@@ -84,19 +84,19 @@ app.use("/api/jobs", jobApplyRoutes);
 app.use("/api/quiz", quizRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/youtube", youtubeRoutes);
-app.use("/api/chatbot", rateLimit({ windowMs: 15 * 60 * 1000, max: 30, message: { message: "Too many chatbot requests. Try again later." } }), chatbotRoutes);
+app.use("/api/chatbot", rateLimit({ windowMs: 15 * 60 * 1000, max: 30, message: { message: "Too many chatbot requests. Try again later." } }), chatbotRoutes); */
 
 // Health check
-app.get("/health", (req, res) => res.json({ status: "ok" }));
+/* app.get("/health", (req, res) => res.json({ status: "ok" }));
 
 // Root
-app.get("/", (req, res) => res.send("Career Counseling Backend is Live!"));
+app.get("/", (req, res) => res.send("Career Counseling Backend is Live!")); */
 
 // Global error handler
-app.use((err, req, res, next) => {
+/* app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: "Internal server error" });
-});
+}); */
 
 // Socket.io (restricted CORS)
 const io = socketIo(server, {
