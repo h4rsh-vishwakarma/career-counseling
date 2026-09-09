@@ -3,5 +3,5 @@ const configuredApi = new URLSearchParams(window.location.search).get("api");
 const API_BASE = configuredApi || (
     window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
         ? "http://localhost:5000"
-        : "https://career-counseling-backend.onrender.com"
+        : "https://career-counseling.onrender.com"
 );

@@ -2,7 +2,7 @@
 
 A full-stack web application connecting students with mentors for career guidance. Features real-time chat, job search, career quizzes, and YouTube video recommendations.
 
-**Live:** [h4rsh-vishwakarma.github.io/career-counseling](https://h4rsh-vishwakarma.github.io/career-counseling/frontend/index.html) | **Backend:** [career-counseling-backend.onrender.com](https://career-counseling-backend.onrender.com)
+**Live:** [h4rsh-vishwakarma.github.io/career-counseling](https://h4rsh-vishwakarma.github.io/career-counseling/) | **Backend:** [career-counseling.onrender.com](https://career-counseling.onrender.com)
 
 ---
 
